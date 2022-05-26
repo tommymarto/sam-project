@@ -15,7 +15,8 @@
         <entry key="..\:/dev/repos/sam-project/app/src/main/res/drawable/day_selected_background.xml" value="0.1925" />
         <entry key="..\:/dev/repos/sam-project/app/src/main/res/layout/activity_main.xml" value="0.21739130434782608" />
         <entry key="..\:/dev/repos/sam-project/app/src/main/res/layout/content_main.xml" value="0.26197916666666665" />
-        <entry key="..\:/dev/repos/sam-project/app/src/main/res/layout/fragment_first.xml" value="0.33" />
+        <entry key="..\:/dev/repos/sam-project/app/src/main/res/layout/fragment_first.xml" value="0.22" />
+        <entry key="..\:/dev/repos/sam-project/app/src/main/res/layout/fragment_maps.xml" value="0.18541666666666667" />
         <entry key="..\:/dev/repos/sam-project/app/src/main/res/layout/fragment_second.xml" value="0.26197916666666665" />
       </map>
     </option>

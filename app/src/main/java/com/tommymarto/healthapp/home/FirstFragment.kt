@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.tommymarto.healthapp.MainActivity
+import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.databinding.FragmentFirstBinding
 import java.time.DayOfWeek
 import java.time.LocalDateTime
@@ -56,9 +58,9 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.buttonFirst.setOnClickListener {
-//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-//        }
+        binding.mapView.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_MapsFragment)
+        }
     }
 
     override fun onResume() {
