@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="ltr"
     tools:context=".home.FirstFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,8 +29,11 @@
 
                 <TextView
                     android:id="@+id/textViewMon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/day_letter_background"
+                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTintMode="multiply"
                     android:text="M"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -55,8 +59,11 @@
 
                 <TextView
                     android:id="@+id/textViewTue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/day_letter_background"
+                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTintMode="multiply"
                     android:text="T"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -82,8 +89,11 @@
 
                 <TextView
                     android:id="@+id/textViewWed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/day_letter_background"
+                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTintMode="multiply"
                     android:text="W"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -109,8 +119,11 @@
 
                 <TextView
                     android:id="@+id/textViewThu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/day_letter_background"
+                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTintMode="multiply"
                     android:text="T"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -136,8 +149,11 @@
 
                 <TextView
                     android:id="@+id/textViewFri"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/day_letter_background"
+                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTintMode="multiply"
                     android:text="F"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -163,8 +179,11 @@
 
                 <TextView
                     android:id="@+id/textViewSat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/day_letter_background"
+                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTintMode="multiply"
                     android:text="S"
                     android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -190,12 +209,16 @@
 
                 <TextView
                     android:id="@+id/textViewSun"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/day_letter_background"
+                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTintMode="multiply"
                     android:text="S"
                     android:textAlignment="center"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="126dp" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/imageViewSun"
