@@ -7,7 +7,14 @@
     android:layoutDirection="ltr"
     tools:context=".ui.DayFragment">
 
+    <com.db.williamchart.view.LinechartView
+        android:id="@+id/myChart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        />
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
