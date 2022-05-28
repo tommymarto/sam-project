@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        createNotification()
     }
 
     override fun onStart() {
@@ -70,5 +72,42 @@ class MainActivity : AppCompatActivity() {
 
     fun updateTitle(title: String) {
         binding.toolbar.title = title
+    }
+
+    private fun createNotification() {
+        val name = "Daily Progress"
+        val descriptionText = "Shows the current status towards the step goal"
+        val importance = NotificationManager.IMPORTANCE_LOW
+        val channelId = "dailyprogress"
+        val mChannel = NotificationChannel(channelId, name, importance)
+        mChannel.description = descriptionText
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(mChannel)
+
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+        val d = ResourcesCompat.getDrawable(resources, R.drawable.day_letter_background, theme)
+        val largeIcon = drawableToBitmap(d!!)
+        val notification = notificationBuilder
+            .setContentText("boia")
+            .setSmallIcon(R.drawable.day_letter_background)
+            .setLargeIcon(largeIcon)
+            .setOngoing(true)
+            .build()
+
+        println("largeIcon: $largeIcon")
+
+        notificationManager.notify(0, notification)
+    }
+
+    fun drawableToBitmap(drawable: Drawable): Bitmap? {
+        if (drawable is BitmapDrawable) {
+            return drawable.bitmap
+        }
+        val bitmap =
+            Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
     }
 }
