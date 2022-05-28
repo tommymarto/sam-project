@@ -6,23 +6,22 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.db.williamchart.data.AxisType
-import com.db.williamchart.view.DonutChartView
 import com.tommymarto.healthapp.MainActivity
 import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.databinding.DayFragmentBinding
+import com.tommymarto.healthapp.databinding.WeekFragmentBinding
+import com.tommymarto.healthapp.utils.BarChartProperties
+import com.tommymarto.healthapp.utils.DonutChartProperties
+import com.tommymarto.healthapp.utils.fillBarChart
+import com.tommymarto.healthapp.utils.fillDonutChart
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class DayFragment : Fragment() {
 
     // This property is only valid between onCreateView and
@@ -42,18 +41,17 @@ class DayFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = DayFragmentBinding.inflate(inflater, container, false)
 
-        when (persistentState.selectedDay.dayOfWeek) {
-            DayOfWeek.MONDAY -> binding.textViewMon.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.TUESDAY -> binding.textViewTue.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.WEDNESDAY -> binding.textViewWed.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.THURSDAY -> binding.textViewThu.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.FRIDAY -> binding.textViewFri.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.SATURDAY -> binding.textViewSat.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.SUNDAY -> binding.textViewSun.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-        }
+//        when (persistentState.selectedDay.dayOfWeek) {
+//            DayOfWeek.MONDAY -> binding.textViewMon.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+//            DayOfWeek.TUESDAY -> binding.textViewTue.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+//            DayOfWeek.WEDNESDAY -> binding.textViewWed.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+//            DayOfWeek.THURSDAY -> binding.textViewThu.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+//            DayOfWeek.FRIDAY -> binding.textViewFri.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+//            DayOfWeek.SATURDAY -> binding.textViewSat.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+//            DayOfWeek.SUNDAY -> binding.textViewSun.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+//        }
 
         fillActivityDonutChart()
         fillMovementChart()
@@ -95,23 +93,7 @@ class DayFragment : Fragment() {
     private fun fillActivityDonutChart() {
         val steps = 7538F
         val exerciseMinutes = 13F
-
-        data class DonutChartProperties(
-            @ColorInt
-            val color: Int,
-            @ColorInt
-            val background: Int,
-            val max: Float
-        )
-
-        fun fillDonutChart(chart: DonutChartView, value: Float, properties: DonutChartProperties) {
-            chart.donutColors = IntArray(1) { properties.color }
-            chart.donutBackgroundColor = properties.background
-            chart.donutTotal = properties.max
-            chart.donutRoundCorners = true
-            chart.donutThickness = 70F
-            chart.animate(listOf(value))
-        }
+        val standHours = 11F
 
         fillDonutChart(
             binding.chartDaySteps,
@@ -135,7 +117,7 @@ class DayFragment : Fragment() {
 
         fillDonutChart(
             binding.chartDaySth,
-            11F,
+            standHours,
             DonutChartProperties(
                 resources.getColor(R.color.brightCyan, activity?.theme),
                 resources.getColor(R.color.backgroundCyan, activity?.theme),
@@ -144,6 +126,11 @@ class DayFragment : Fragment() {
         )
     }
 
+    /**
+     *  Bar chart stuff
+     *
+     *
+     */
     private fun fillMovementChart() {
         val barCount = 48
         var labels = (0..barCount).map {
@@ -155,14 +142,36 @@ class DayFragment : Fragment() {
             }
         }
         val values = (0..barCount).map { it.toFloat() }
+        val entries = labels zip values
 
-        val barChart = binding.chartDayDetails
-        barChart.barsColor = resources.getColor(R.color.brightDarkRed, activity?.theme)
-        barChart.barRadius = 10F
-        barChart.axis = AxisType.X
-        barChart.labelsSize = 40F
-        barChart.labelsColor = resources.getColor(R.color.white, activity?.theme)
+        fillBarChart(
+            binding.chartDayStepsDetails,
+            entries,
+            BarChartProperties(
+                resources.getColor(R.color.brightDarkRed, activity?.theme)
+            ),
+            resources,
+            activity
+        )
 
-        barChart.animate(labels zip values)
+        fillBarChart(
+            binding.chartDayExerciseDetails,
+            entries,
+            BarChartProperties(
+                resources.getColor(R.color.brightGreen, activity?.theme)
+            ),
+            resources,
+            activity
+        )
+
+        fillBarChart(
+            binding.chartDayStandDetails,
+            entries,
+            BarChartProperties(
+                resources.getColor(R.color.brightCyan, activity?.theme)
+            ),
+            resources,
+            activity
+        )
     }
 }

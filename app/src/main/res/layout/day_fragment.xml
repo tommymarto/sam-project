@@ -10,230 +10,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:paddingEnd="16dp"
+        android:paddingHorizontal="16dp"
         tools:background="#FF555555">
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/textViewMon"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:background="@drawable/day_letter_background"
-                    android:backgroundTint="#00FFFFFF"
-                    android:backgroundTintMode="multiply"
-                    android:text="M"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageViewMon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewMon" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/textViewTue"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:background="@drawable/day_letter_background"
-                    android:backgroundTint="#00FFFFFF"
-                    android:backgroundTintMode="multiply"
-                    android:text="T"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageViewTue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewTue" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/textViewWed"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:background="@drawable/day_letter_background"
-                    android:backgroundTint="#00FFFFFF"
-                    android:backgroundTintMode="multiply"
-                    android:text="W"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageViewWed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewWed" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/textViewThu"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:background="@drawable/day_letter_background"
-                    android:backgroundTint="#00FFFFFF"
-                    android:backgroundTintMode="multiply"
-                    android:text="T"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageViewThu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewThu" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/textViewFri"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:background="@drawable/day_letter_background"
-                    android:backgroundTint="#00FFFFFF"
-                    android:backgroundTintMode="multiply"
-                    android:text="F"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageViewFri"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewFri" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/textViewSat"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:background="@drawable/day_letter_background"
-                    android:backgroundTint="#00FFFFFF"
-                    android:backgroundTintMode="multiply"
-                    android:text="S"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageViewSat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSat" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/textViewSun"
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:background="@drawable/day_letter_background"
-                    android:backgroundTint="#00FFFFFF"
-                    android:backgroundTintMode="multiply"
-                    android:text="S"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/imageViewSun"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSun" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
 
         <com.db.williamchart.view.DonutChartView
             android:id="@+id/chartDaySteps"
@@ -243,7 +22,7 @@
             android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" >
+            app:layout_constraintTop_toTopOf="parent" >
 
             <ImageView
                 android:id="@+id/chartDayStepsArrowRight"
@@ -262,7 +41,7 @@
             android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" >
+            app:layout_constraintTop_toTopOf="parent" >
 
             <ImageView
                 android:id="@+id/chartDayExerciseArrowDoubleRight"
@@ -281,7 +60,7 @@
             android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" >
+            app:layout_constraintTop_toTopOf="parent" >
 
             <ImageView
                 android:id="@+id/chartDaySthArrowDoubleUp"
@@ -292,35 +71,120 @@
                 android:src="@drawable/arrow_up" />
         </com.db.williamchart.view.DonutChartView>
 
-        <com.db.williamchart.view.BarChartView
-            android:id="@+id/chartDayDetails"
-            android:layout_width="394dp"
-            android:layout_height="102dp"
-            android:layout_marginTop="44dp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartDaySteps" />
-
+        <!--
+            Daily movement section
+        -->
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/textViewMove"
             android:layout_width="136dp"
             android:layout_height="18dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="24dp"
-            android:text="Movement"
+            android:text="Move"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chartDaySteps" />
+
+        <TextView
+            android:id="@+id/textViewDailySteps"
+            android:layout_width="154dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="4dp"
+            android:text="/10000 STEPS"
+            android:textColor="@color/brightDarkRed"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMove" />
+
+        <com.db.williamchart.view.BarChartView
+            android:id="@+id/chartDayStepsDetails"
+            android:layout_width="394dp"
+            android:layout_height="102dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDailySteps" />
+
+        <!--
+            Daily movement section
+        -->
+        <TextView
+            android:id="@+id/textViewExercise"
+            android:layout_width="136dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="24dp"
+            android:text="Exercise"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartDayStepsDetails" />
+
+        <TextView
+            android:id="@+id/textViewDailyExercise"
+            android:layout_width="154dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="4dp"
+            android:text="/30 MIN"
+            android:textColor="@color/brightGreen"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewExercise" />
+
+        <com.db.williamchart.view.BarChartView
+            android:id="@+id/chartDayExerciseDetails"
+            android:layout_width="394dp"
+            android:layout_height="102dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDailyExercise" />
+
+        <!--
+            Daily movement section
+        -->
+        <TextView
+            android:id="@+id/textViewStand"
+            android:layout_width="136dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="24dp"
+            android:text="Stand"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartDayExerciseDetails" />
+
+        <TextView
+            android:id="@+id/textViewDailyStand"
+            android:layout_width="154dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="4dp"
+            android:text="/12 HRS"
+            android:textColor="@color/brightCyan"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewStand" />
+
+        <com.db.williamchart.view.BarChartView
+            android:id="@+id/chartDayStandDetails"
+            android:layout_width="394dp"
+            android:layout_height="102dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDailyStand" />
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="379dp"
             android:layout_height="115dp"
             android:layout_marginTop="16dp"
+            android:background="@color/brightGreen"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartDayDetails"
+            app:layout_constraintTop_toBottomOf="@+id/chartDayStandDetails"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
