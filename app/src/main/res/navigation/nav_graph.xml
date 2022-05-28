@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.tommymarto.healthapp.home.FirstFragment"
+        android:name="com.tommymarto.healthapp.ui.DayFragment"
         tools:layout="@layout/fragment_first">
     </fragment>
 
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.tommymarto.healthapp.home.SecondFragment"
+        android:name="com.tommymarto.healthapp.ui.ViewPagerHomeFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
         <action
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/MapsFragment"
-        android:name="com.tommymarto.healthapp.home.MapsFragment"
+        android:name="com.tommymarto.healthapp.ui.MapsFragment"
         android:label="sas"
         tools:layout="@layout/fragment_maps">
     </fragment>

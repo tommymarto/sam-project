@@ -1,4 +1,4 @@
-package com.tommymarto.healthapp.home
+package com.tommymarto.healthapp.ui
 
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class DayFragment : Fragment() {
 
     // This property is only valid between onCreateView and
     // onDestroyView.
