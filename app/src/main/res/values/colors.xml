@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="transparent">#00000000</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="brightDarkRed">#9F1827</color>
+    <color name="brightDarkRedEndGradient">#FD3188</color>
+    <color name="backgroundDarkRed">#230004</color>
+    <color name="brightGreen">#55E000</color>
+    <color name="brightGreenEndGradient">#B0FF00</color>
+    <color name="backgroundGreen">#092101</color>
+    <color name="brightCyan">#00CCD0</color>
+    <color name="brightCyanEndGradient">#00FDCE</color>
+    <color name="backgroundCyan">#031C23</color>
+    <color name="purple">#FF1552</color>
 </resources>

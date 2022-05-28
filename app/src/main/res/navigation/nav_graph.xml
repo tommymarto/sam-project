@@ -8,14 +8,14 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.tommymarto.healthapp.ui.DayFragment"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/day_fragment">
     </fragment>
 
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.tommymarto.healthapp.ui.ViewPagerHomeFragment"
+        android:name="com.tommymarto.healthapp.ui.ViewPagerHostFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/view_pager_host_fragment">
         <action
             android:id="@+id/action_SecondFragment_to_MapsFragment"
             app:destination="@id/MapsFragment" />
@@ -25,6 +25,6 @@
         android:id="@+id/MapsFragment"
         android:name="com.tommymarto.healthapp.ui.MapsFragment"
         android:label="sas"
-        tools:layout="@layout/fragment_maps">
+        tools:layout="@layout/maps_fragment">
     </fragment>
 </navigation>

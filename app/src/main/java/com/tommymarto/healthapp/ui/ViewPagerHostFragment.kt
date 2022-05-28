@@ -7,17 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.tommymarto.healthapp.databinding.FragmentSecondBinding
+import com.tommymarto.healthapp.databinding.ViewPagerHostFragmentBinding
 import java.time.LocalDateTime
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class ViewPagerHomeFragment : Fragment() {
+class ViewPagerHostFragment : Fragment() {
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: ViewPagerHostFragmentBinding? = null
     private val binding get() = _binding!!
 
     /**
@@ -31,7 +31,7 @@ class ViewPagerHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        _binding = ViewPagerHostFragmentBinding.inflate(inflater, container, false)
 
         viewPager = binding.pager
         // The pager adapter, which provides the pages to the view pager widget.
