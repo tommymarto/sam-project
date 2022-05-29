@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
         android:paddingHorizontal="16dp"
         tools:background="#FF555555">
 
@@ -86,10 +86,10 @@
 
         <TextView
             android:id="@+id/textViewDailySteps"
-            android:layout_width="154dp"
+            android:layout_width="200dp"
             android:layout_height="34dp"
             android:layout_marginStart="4dp"
-            android:text="/10000 STEPS"
+            android:text="@string/steps_goal"
             android:textColor="@color/brightDarkRed"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,7 +124,7 @@
             android:layout_width="154dp"
             android:layout_height="34dp"
             android:layout_marginStart="4dp"
-            android:text="/30 MIN"
+            android:text="@string/exercise_goal"
             android:textColor="@color/brightGreen"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +159,7 @@
             android:layout_width="154dp"
             android:layout_height="34dp"
             android:layout_marginStart="4dp"
-            android:text="/12 HRS"
+            android:text="@string/stand_goal"
             android:textColor="@color/brightCyan"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"

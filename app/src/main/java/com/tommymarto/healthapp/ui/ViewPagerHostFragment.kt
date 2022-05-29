@@ -8,11 +8,15 @@ import android.view.ViewGroup
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.tommymarto.healthapp.databinding.ViewPagerHostFragmentBinding
+import com.tommymarto.healthapp.utils.weekOfYear
+import java.lang.ref.WeakReference
 import java.time.LocalDateTime
+import kotlin.math.ceil
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
+
+const val TOTAL_DAYS = 301
+const val TOTAL_WEEKS = (TOTAL_DAYS/7) + 1
+
 class ViewPagerHostFragment : Fragment() {
 
     // This property is only valid between onCreateView and
@@ -20,11 +24,34 @@ class ViewPagerHostFragment : Fragment() {
     private var _binding: ViewPagerHostFragmentBinding? = null
     private val binding get() = _binding!!
 
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
-    private lateinit var viewPager: ViewPager2
+    private lateinit var weekViewPager: ViewPager2
+    private lateinit var weekPagerAdapter: WeeklyViewPagerAdapter
+    private lateinit var dayViewPager: ViewPager2
+    private lateinit var dayPagerAdapter: DailyViewPagerAdapter
+    private var onDayChangeCallback = object: ViewPager2.OnPageChangeCallback() {
+        private var _lastPageSelected: DayFragment? = null
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+
+            val dayFragment = dayPagerAdapter.getFragment(position)
+            var weekFragment = weekPagerAdapter.getFragment(weekViewPager.currentItem)
+
+            val lastPageDay = _lastPageSelected?.selectedDay ?: dayFragment.selectedDay
+
+
+            val newWeekPos = weekViewPager.currentItem + (lastPageDay.weekOfYear - dayFragment.selectedDay.weekOfYear)
+            if (newWeekPos != weekViewPager.currentItem) {
+                weekViewPager.setCurrentItem(newWeekPos, true)
+                weekFragment = weekPagerAdapter.getFragment(newWeekPos)
+                weekFragment.selectedDay = dayFragment.selectedDay
+            } else {
+                weekFragment.selectedDay = dayFragment.selectedDay
+                weekFragment.updateSelectedDay()
+            }
+
+            _lastPageSelected = dayFragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,13 +60,20 @@ class ViewPagerHostFragment : Fragment() {
         super.onCreate(savedInstanceState)
         _binding = ViewPagerHostFragmentBinding.inflate(inflater, container, false)
 
-        viewPager = binding.pager
-        // The pager adapter, which provides the pages to the view pager widget.
-        val pagerAdapter = ScreenSlidePagerAdapter(this)
-        viewPager.adapter = pagerAdapter
+        // setup day pager
+        dayViewPager = binding.dayPager
+        dayPagerAdapter = DailyViewPagerAdapter(this)
+        dayViewPager.adapter = dayPagerAdapter
+
+        // setup week pager
+        weekViewPager = binding.weekPager
+        weekPagerAdapter = WeeklyViewPagerAdapter(this)
+        weekViewPager.adapter = weekPagerAdapter
+        weekViewPager.isUserInputEnabled = false
+
+        dayViewPager.registerOnPageChangeCallback(onDayChangeCallback)
 
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,23 +86,45 @@ class ViewPagerHostFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        dayViewPager.unregisterOnPageChangeCallback(onDayChangeCallback)
         _binding = null
     }
 
-    /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
-     */
-    private inner class ScreenSlidePagerAdapter(fa: Fragment) : FragmentStateAdapter(fa) {
+    private inner class DailyViewPagerAdapter(fa: Fragment) : FragmentStateAdapter(fa) {
         val now = LocalDateTime.now()
-        var _itemCount = 300
-        override fun getItemCount(): Int = _itemCount
+
+        // only store as weak references, so you're not holding discarded fragments in memory
+        private val fragmentCache = mutableMapOf<Int, WeakReference<DayFragment>>()
+
+        override fun getItemCount(): Int = TOTAL_DAYS
 
         override fun createFragment(position: Int): Fragment {
-            val fragment = DayFragment()
-            fragment.setState(now.minusDays(position.toLong()))
+            // return the cached fragment if there is one
+            fragmentCache[position]?.get()?.let { return it }
 
-            return fragment
+            return DayFragment().also {
+                it.selectedDay = now.minusDays(position.toLong())
+                fragmentCache[position] = WeakReference(it)
+            }
         }
+
+        fun getFragment(position: Int): DayFragment = createFragment(position) as DayFragment
+    }
+
+    private inner class WeeklyViewPagerAdapter(fa: Fragment) : FragmentStateAdapter(fa) {
+        // only store as weak references, so you're not holding discarded fragments in memory
+        private val fragmentCache = mutableMapOf<Int, WeakReference<WeekFragment>>()
+
+        override fun getItemCount(): Int = TOTAL_WEEKS
+        override fun createFragment(position: Int): Fragment {
+            // return the cached fragment if there is one
+            fragmentCache[position]?.get()?.let { return it }
+
+            return WeekFragment().also {
+                fragmentCache[position] = WeakReference(it)
+            }
+        }
+
+        fun getFragment(position: Int): WeekFragment = createFragment(position) as WeekFragment
     }
 }

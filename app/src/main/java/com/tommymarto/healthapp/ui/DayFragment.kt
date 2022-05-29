@@ -29,29 +29,13 @@ class DayFragment : Fragment() {
     private var _binding: DayFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val persistentState = object {
-        var selectedDay = LocalDateTime.now()
-    }
-
-    fun setState(day: LocalDateTime) {
-        persistentState.selectedDay = day
-    }
+    var selectedDay: LocalDateTime = LocalDateTime.now()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = DayFragmentBinding.inflate(inflater, container, false)
-
-//        when (persistentState.selectedDay.dayOfWeek) {
-//            DayOfWeek.MONDAY -> binding.textViewMon.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-//            DayOfWeek.TUESDAY -> binding.textViewTue.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-//            DayOfWeek.WEDNESDAY -> binding.textViewWed.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-//            DayOfWeek.THURSDAY -> binding.textViewThu.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-//            DayOfWeek.FRIDAY -> binding.textViewFri.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-//            DayOfWeek.SATURDAY -> binding.textViewSat.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-//            DayOfWeek.SUNDAY -> binding.textViewSun.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-//        }
 
         fillActivityDonutChart()
         fillMovementChart()
@@ -70,10 +54,10 @@ class DayFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        val formattedDate = persistentState.selectedDay.format(DateTimeFormatter.ofPattern("dd LLLL yyyy"))
-        val formattedDay = persistentState.selectedDay.format(DateTimeFormatter.ofPattern("E"))
+        val formattedDate = selectedDay.format(DateTimeFormatter.ofPattern("dd LLLL yyyy"))
+        val formattedDay = selectedDay.format(DateTimeFormatter.ofPattern("E"))
 
-        val isToday = DateUtils.isToday(ZonedDateTime.of(persistentState.selectedDay, ZoneId.systemDefault()).toInstant().toEpochMilli())
+        val isToday = DateUtils.isToday(ZonedDateTime.of(selectedDay, ZoneId.systemDefault()).toInstant().toEpochMilli())
         val day = if (isToday) "Today, $formattedDate" else "$formattedDay, $formattedDate"
         (activity as MainActivity).updateTitle(day)
     }

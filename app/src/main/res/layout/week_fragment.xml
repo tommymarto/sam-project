@@ -7,6 +7,7 @@
     android:layout_height="78dp"
     android:layout_marginTop="4dp"
     android:paddingHorizontal="16px"
+    android:layoutDirection="ltr"
     tools:context=".ui.WeekFragment">
 
     <LinearLayout

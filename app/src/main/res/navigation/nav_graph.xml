@@ -3,18 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/SecondFragment">
+    app:startDestination="@id/ViewPagerHostFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/DayFragment"
         android:name="com.tommymarto.healthapp.ui.DayFragment"
         tools:layout="@layout/day_fragment">
     </fragment>
 
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/ViewPagerHostFragment"
         android:name="com.tommymarto.healthapp.ui.ViewPagerHostFragment"
-        android:label="@string/second_fragment_label"
         tools:layout="@layout/view_pager_host_fragment">
         <action
             android:id="@+id/action_SecondFragment_to_MapsFragment"
