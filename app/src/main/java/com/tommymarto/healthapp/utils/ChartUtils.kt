@@ -18,7 +18,8 @@ data class DonutChartProperties(
     val color: Int,
     @ColorInt
     val background: Int,
-    val max: Float
+    val max: Float,
+    val thickness: Float = 70F
 )
 
 fun fillDonutChart(chart: DonutChartView, value: Float, properties: DonutChartProperties) {
@@ -26,7 +27,7 @@ fun fillDonutChart(chart: DonutChartView, value: Float, properties: DonutChartPr
     chart.donutBackgroundColor = properties.background
     chart.donutTotal = properties.max
     chart.donutRoundCorners = true
-    chart.donutThickness = 70F
+    chart.donutThickness = properties.thickness
     chart.animate(listOf(value))
 }
 

@@ -24,8 +24,7 @@ import java.time.format.DateTimeFormatter
 
 class DayFragment : Fragment() {
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    // This property is only valid between onCreateView and onDestroyView.
     private var _binding: DayFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -125,7 +124,7 @@ class DayFragment : Fragment() {
                 else -> ""
             }
         }
-        val values = (0..barCount).map { it.toFloat() }
+        val values = (0..barCount).map { (it + 1).toFloat() }
         val entries = labels zip values
 
         fillBarChart(

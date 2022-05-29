@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.Permission
+import java.time.LocalDateTime
 
 const val MIN_SUPPORTED_SDK = Build.VERSION_CODES.O_MR1
 
@@ -22,6 +23,16 @@ class HealthConnectionManager(context: Context) {
      */
     suspend fun hasAllPermissions(permissions: Set<Permission>): Boolean {
         return permissions == healthConnectClient.permissionController.getGrantedPermissions(permissions)
+    }
+
+    suspend fun getDaySteps(day: LocalDateTime): Float {
+        return (Math.random() * 110000).toFloat()
+    }
+    suspend fun getDayExercise(day: LocalDateTime): Float {
+        return (Math.random() * 31).toFloat()
+    }
+    suspend fun getDayStand(day: LocalDateTime): Float {
+        return (Math.random() * 12.5).toFloat()
     }
 }
 

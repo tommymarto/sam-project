@@ -8,6 +8,7 @@
     android:layout_marginTop="4dp"
     android:paddingHorizontal="16px"
     android:layoutDirection="ltr"
+    tools:background="#FF555555"
     tools:context=".ui.WeekFragment">
 
     <LinearLayout
@@ -15,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        tools:background="#FF555555"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,6 +24,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:background="#FF555555"
             android:layout_weight="1">
 
             <TextView
@@ -37,13 +40,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageViewMon"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_marginTop="4dp"
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartMonSteps"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                tools:chart_donutThickness="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewMon" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartMonExercise"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15.5dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewMon" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartMonSth"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="23dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewMon" />
@@ -67,13 +92,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageViewTue"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_marginTop="4dp"
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartTueSteps"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                tools:chart_donutThickness="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTue" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartTueExercise"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15.5dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTue" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartTueSth"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="23dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewTue" />
@@ -97,13 +144,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageViewWed"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_marginTop="4dp"
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartWedSteps"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                tools:chart_donutThickness="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewWed" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartWedExercise"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15.5dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewWed" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartWedSth"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="23dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewWed" />
@@ -127,13 +196,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageViewThu"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_marginTop="4dp"
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartThuSteps"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                tools:chart_donutThickness="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewThu" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartThuExercise"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15.5dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewThu" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartThuSth"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="23dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewThu" />
@@ -157,13 +248,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageViewFri"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_marginTop="4dp"
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartFriSteps"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                tools:chart_donutThickness="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewFri" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartFriExercise"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15.5dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewFri" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartFriSth"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="23dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewFri" />
@@ -187,13 +300,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageViewSat"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_marginTop="4dp"
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartSatSteps"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                tools:chart_donutThickness="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSat" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartSatExercise"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15.5dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSat" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartSatSth"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="23dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewSat" />
@@ -217,13 +352,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageViewSun"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_marginTop="4dp"
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartSunSteps"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                tools:chart_donutThickness="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSun" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartSunExercise"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="15.5dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSun" />
+
+            <com.db.williamchart.view.DonutChartView
+                android:id="@+id/chartSunSth"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="23dp"
+                tools:chart_donutThickness="5dp"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewSun" />
