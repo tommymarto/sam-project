@@ -10,181 +10,193 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="16dp"
-        android:paddingHorizontal="16dp"
+        android:padding="16dp"
         tools:background="#FF555555">
-
-        <com.db.williamchart.view.DonutChartView
-            android:id="@+id/chartDaySteps"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
-
-            <ImageView
-                android:id="@+id/chartDayStepsArrowRight"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/transparent"
-                android:src="@drawable/arrow_right" />
-        </com.db.williamchart.view.DonutChartView>
-
-        <com.db.williamchart.view.DonutChartView
-            android:id="@+id/chartDayExercise"
-            android:layout_width="195dp"
-            android:layout_height="195dp"
-            android:layout_marginTop="43.5dp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
-
-            <ImageView
-                android:id="@+id/chartDayExerciseArrowDoubleRight"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/transparent"
-                android:src="@drawable/arrow_double_right" />
-        </com.db.williamchart.view.DonutChartView>
-
-        <com.db.williamchart.view.DonutChartView
-            android:id="@+id/chartDaySth"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginTop="71dp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
-
-            <ImageView
-                android:id="@+id/chartDaySthArrowDoubleUp"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/transparent"
-                android:src="@drawable/arrow_up" />
-        </com.db.williamchart.view.DonutChartView>
-
-        <!--
-            Daily movement section
-        -->
-        <TextView
-            android:id="@+id/textViewMove"
-            android:layout_width="136dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="24dp"
-            android:text="Move"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartDaySteps" />
-
-        <TextView
-            android:id="@+id/textViewDailySteps"
-            android:layout_width="200dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="4dp"
-            android:text="@string/steps_goal"
-            android:textColor="@color/brightDarkRed"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewMove" />
-
-        <com.db.williamchart.view.BarChartView
-            android:id="@+id/chartDayStepsDetails"
-            android:layout_width="394dp"
-            android:layout_height="102dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDailySteps" />
-
-        <!--
-            Daily movement section
-        -->
-        <TextView
-            android:id="@+id/textViewExercise"
-            android:layout_width="136dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="24dp"
-            android:text="Exercise"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartDayStepsDetails" />
-
-        <TextView
-            android:id="@+id/textViewDailyExercise"
-            android:layout_width="154dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="4dp"
-            android:text="@string/exercise_goal"
-            android:textColor="@color/brightGreen"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewExercise" />
-
-        <com.db.williamchart.view.BarChartView
-            android:id="@+id/chartDayExerciseDetails"
-            android:layout_width="394dp"
-            android:layout_height="102dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDailyExercise" />
-
-        <!--
-            Daily movement section
-        -->
-        <TextView
-            android:id="@+id/textViewStand"
-            android:layout_width="136dp"
-            android:layout_height="18dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="24dp"
-            android:text="Stand"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartDayExerciseDetails" />
-
-        <TextView
-            android:id="@+id/textViewDailyStand"
-            android:layout_width="154dp"
-            android:layout_height="34dp"
-            android:layout_marginStart="4dp"
-            android:text="@string/stand_goal"
-            android:textColor="@color/brightCyan"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewStand" />
-
-        <com.db.williamchart.view.BarChartView
-            android:id="@+id/chartDayStandDetails"
-            android:layout_width="394dp"
-            android:layout_height="102dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDailyStand" />
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="379dp"
-            android:layout_height="115dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/brightGreen"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartDayStandDetails"
-            />
+        <com.tommymarto.healthapp.ui.components.ActivityDonutChartView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="#FF555555" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:visibility="gone"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:paddingBottom="16dp"-->
+<!--        android:paddingHorizontal="16dp"-->
+<!--        tools:background="#FF555555">-->
+
+<!--        <com.db.williamchart.view.DonutChartView-->
+<!--            android:id="@+id/chartTodaySteps"-->
+<!--            android:layout_width="250dp"-->
+<!--            android:layout_height="250dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" >-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/chartDayStepsArrowRight"-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="24dp"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:background="@color/transparent"-->
+<!--                android:src="@drawable/arrow_right" />-->
+<!--        </com.db.williamchart.view.DonutChartView>-->
+
+<!--        <com.db.williamchart.view.DonutChartView-->
+<!--            android:id="@+id/chartTodayExercise"-->
+<!--            android:layout_width="195dp"-->
+<!--            android:layout_height="195dp"-->
+<!--            android:layout_marginTop="43.5dp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" >-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/chartDayExerciseArrowDoubleRight"-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="24dp"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:background="@color/transparent"-->
+<!--                android:src="@drawable/arrow_double_right" />-->
+<!--        </com.db.williamchart.view.DonutChartView>-->
+
+<!--        <com.db.williamchart.view.DonutChartView-->
+<!--            android:id="@+id/chartTodaySth"-->
+<!--            android:layout_width="140dp"-->
+<!--            android:layout_height="140dp"-->
+<!--            android:layout_marginTop="71dp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" >-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/chartDaySthArrowDoubleUp"-->
+<!--                android:layout_width="24dp"-->
+<!--                android:layout_height="24dp"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:background="@color/transparent"-->
+<!--                android:src="@drawable/arrow_up" />-->
+<!--        </com.db.williamchart.view.DonutChartView>-->
+
+<!--        &lt;!&ndash;-->
+<!--            Daily movement section-->
+<!--        &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:id="@+id/textViewMove"-->
+<!--            android:layout_width="136dp"-->
+<!--            android:layout_height="18dp"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:text="Move"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/chartTodaySteps" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/textViewDailySteps"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="34dp"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:text="@string/steps_goal"-->
+<!--            android:textColor="@color/brightDarkRed"-->
+<!--            android:textSize="24sp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewMove" />-->
+
+<!--        <com.db.williamchart.view.BarChartView-->
+<!--            android:id="@+id/chartDayStepsDetails"-->
+<!--            android:layout_width="394dp"-->
+<!--            android:layout_height="102dp"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.47"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewDailySteps" />-->
+
+<!--        &lt;!&ndash;-->
+<!--            Daily movement section-->
+<!--        &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:id="@+id/textViewExercise"-->
+<!--            android:layout_width="136dp"-->
+<!--            android:layout_height="18dp"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:text="Exercise"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/chartDayStepsDetails" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/textViewDailyExercise"-->
+<!--            android:layout_width="154dp"-->
+<!--            android:layout_height="34dp"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:text="@string/exercise_goal"-->
+<!--            android:textColor="@color/brightGreen"-->
+<!--            android:textSize="24sp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewExercise" />-->
+
+<!--        <com.db.williamchart.view.BarChartView-->
+<!--            android:id="@+id/chartDayExerciseDetails"-->
+<!--            android:layout_width="394dp"-->
+<!--            android:layout_height="102dp"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.47"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewDailyExercise" />-->
+
+<!--        &lt;!&ndash;-->
+<!--            Daily movement section-->
+<!--        &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:id="@+id/textViewStand"-->
+<!--            android:layout_width="136dp"-->
+<!--            android:layout_height="18dp"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:text="Stand"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/chartDayExerciseDetails" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/textViewDailyStand"-->
+<!--            android:layout_width="154dp"-->
+<!--            android:layout_height="34dp"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:text="@string/stand_goal"-->
+<!--            android:textColor="@color/brightCyan"-->
+<!--            android:textSize="24sp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewStand" />-->
+
+<!--        <com.db.williamchart.view.BarChartView-->
+<!--            android:id="@+id/chartDayStandDetails"-->
+<!--            android:layout_width="394dp"-->
+<!--            android:layout_height="102dp"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:layout_weight="1"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.47"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewDailyStand" />-->
+
+<!--        <com.google.android.gms.maps.MapView-->
+<!--            android:id="@+id/mapView"-->
+<!--            android:layout_width="379dp"-->
+<!--            android:layout_height="115dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:background="@color/brightGreen"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/chartDayStandDetails"-->
+<!--            />-->
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 </androidx.core.widget.NestedScrollView>

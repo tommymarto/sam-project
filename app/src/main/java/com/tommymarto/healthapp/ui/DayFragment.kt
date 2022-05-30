@@ -45,9 +45,9 @@ class DayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.mapView.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_MapsFragment)
-        }
+//        binding.mapView.setOnClickListener {
+//            findNavController().navigate(R.id.action_SecondFragment_to_MapsFragment)
+//        }
     }
 
     override fun onResume() {
@@ -74,39 +74,39 @@ class DayFragment : Fragment() {
      *
      */
     private fun fillActivityDonutChart() {
-        val steps = 7538F
-        val exerciseMinutes = 13F
-        val standHours = 11F
-
-        fillDonutChart(
-            binding.chartDaySteps,
-            steps,
-            DonutChartProperties(
-                resources.getColor(R.color.brightDarkRed, activity?.theme),
-                resources.getColor(R.color.backgroundDarkRed, activity?.theme),
-                10000F
-            )
-        )
-
-        fillDonutChart(
-            binding.chartDayExercise,
-            exerciseMinutes,
-            DonutChartProperties(
-                resources.getColor(R.color.brightGreen, activity?.theme),
-                resources.getColor(R.color.backgroundGreen, activity?.theme),
-                30F
-            )
-        )
-
-        fillDonutChart(
-            binding.chartDaySth,
-            standHours,
-            DonutChartProperties(
-                resources.getColor(R.color.brightCyan, activity?.theme),
-                resources.getColor(R.color.backgroundCyan, activity?.theme),
-                12F
-            )
-        )
+//        val steps = 7538F
+//        val exerciseMinutes = 13F
+//        val standHours = 11F
+//
+//        fillDonutChart(
+//            binding.chartTodaySteps,
+//            steps,
+//            DonutChartProperties(
+//                resources.getColor(R.color.brightDarkRed, activity?.theme),
+//                resources.getColor(R.color.backgroundDarkRed, activity?.theme),
+//                10000F
+//            )
+//        )
+//
+//        fillDonutChart(
+//            binding.chartTodayExercise,
+//            exerciseMinutes,
+//            DonutChartProperties(
+//                resources.getColor(R.color.brightGreen, activity?.theme),
+//                resources.getColor(R.color.backgroundGreen, activity?.theme),
+//                30F
+//            )
+//        )
+//
+//        fillDonutChart(
+//            binding.chartTodaySth,
+//            standHours,
+//            DonutChartProperties(
+//                resources.getColor(R.color.brightCyan, activity?.theme),
+//                resources.getColor(R.color.backgroundCyan, activity?.theme),
+//                12F
+//            )
+//        )
     }
 
     /**
@@ -115,46 +115,46 @@ class DayFragment : Fragment() {
      *
      */
     private fun fillMovementChart() {
-        val barCount = 48
-        var labels = (0..barCount).map {
-            when(it) {
-                    barCount/4 -> "06:00"
-                2 * barCount/4 -> "12:00"
-                3 * barCount/4 -> "18:00"
-                else -> ""
-            }
-        }
-        val values = (0..barCount).map { (it + 1).toFloat() }
-        val entries = labels zip values
-
-        fillBarChart(
-            binding.chartDayStepsDetails,
-            entries,
-            BarChartProperties(
-                resources.getColor(R.color.brightDarkRed, activity?.theme)
-            ),
-            resources,
-            activity
-        )
-
-        fillBarChart(
-            binding.chartDayExerciseDetails,
-            entries,
-            BarChartProperties(
-                resources.getColor(R.color.brightGreen, activity?.theme)
-            ),
-            resources,
-            activity
-        )
-
-        fillBarChart(
-            binding.chartDayStandDetails,
-            entries,
-            BarChartProperties(
-                resources.getColor(R.color.brightCyan, activity?.theme)
-            ),
-            resources,
-            activity
-        )
+//        val barCount = 48
+//        var labels = (0..barCount).map {
+//            when(it) {
+//                    barCount/4 -> "06:00"
+//                2 * barCount/4 -> "12:00"
+//                3 * barCount/4 -> "18:00"
+//                else -> ""
+//            }
+//        }
+//        val values = (0..barCount).map { (it + 1).toFloat() }
+//        val entries = labels zip values
+//
+//        fillBarChart(
+//            binding.chartDayStepsDetails,
+//            entries,
+//            BarChartProperties(
+//                resources.getColor(R.color.brightDarkRed, activity?.theme)
+//            ),
+//            resources,
+//            activity
+//        )
+//
+//        fillBarChart(
+//            binding.chartDayExerciseDetails,
+//            entries,
+//            BarChartProperties(
+//                resources.getColor(R.color.brightGreen, activity?.theme)
+//            ),
+//            resources,
+//            activity
+//        )
+//
+//        fillBarChart(
+//            binding.chartDayStandDetails,
+//            entries,
+//            BarChartProperties(
+//                resources.getColor(R.color.brightCyan, activity?.theme)
+//            ),
+//            resources,
+//            activity
+//        )
     }
 }

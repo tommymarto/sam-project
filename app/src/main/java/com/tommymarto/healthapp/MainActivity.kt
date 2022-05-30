@@ -2,25 +2,26 @@ package com.tommymarto.healthapp
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup
+import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.WindowCompat
-import androidx.health.connect.client.permission.HealthDataRequestPermissions
+import androidx.core.view.drawToBitmap
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.tommymarto.healthapp.data.HealthConnectionManager
+import com.db.williamchart.view.DonutChartView
 import com.tommymarto.healthapp.databinding.ActivityMainBinding
+import com.tommymarto.healthapp.ui.components.ActivityDonutChartView
+import com.tommymarto.healthapp.utils.DonutChartProperties
+import com.tommymarto.healthapp.utils.fillDonutChart
+import com.tommymarto.healthapp.utils.toBitmap
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,12 +40,12 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        createNotification()
     }
 
     override fun onStart() {
         super.onStart()
+
+        createNotification()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,12 +84,32 @@ class MainActivity : AppCompatActivity() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(mChannel)
 
+        R.layout.activity_donut_chart_view
+
+        // setup the layout to use it in custom notification
+        val notificationLayout = RemoteViews(this.packageName, R.layout.notification_layout)
+
+        val activityDonut = ActivityDonutChartView(this, null)
+
+        val donut = DonutChartView(this)
+        fillDonutChart(donut, 10F, DonutChartProperties(
+            resources.getColor(R.color.brightDarkRed, theme),
+            resources.getColor(R.color.backgroundDarkRed, theme),
+            30F,
+            15F
+        ))
+
+//        val largeIcon = activityDonut.drawToBitmap()
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-        val d = ResourcesCompat.getDrawable(resources, R.drawable.day_letter_background, theme)
-        val largeIcon = drawableToBitmap(d!!)
+//        val d = ResourcesCompat.getDrawable(resources, R.drawable.day_letter_background, theme)
+//        val largeIcon = d!!.toBitmap()
+        val largeIcon = donut.toBitmap(50, 50)
         val notification = notificationBuilder
-            .setContentText("boia")
             .setSmallIcon(R.drawable.day_letter_background)
+//            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+//            .setCustomContentView(notificationLayout)
+            .setContentText("boia")
             .setLargeIcon(largeIcon)
             .setOngoing(true)
             .build()
@@ -98,15 +119,5 @@ class MainActivity : AppCompatActivity() {
         notificationManager.notify(0, notification)
     }
 
-    fun drawableToBitmap(drawable: Drawable): Bitmap? {
-        if (drawable is BitmapDrawable) {
-            return drawable.bitmap
-        }
-        val bitmap =
-            Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        return bitmap
-    }
+
 }
