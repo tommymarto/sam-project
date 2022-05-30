@@ -4,11 +4,20 @@ import android.content.Context
 import android.os.Build
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.Permission
+import androidx.health.connect.client.records.HeartRateSeries
+import androidx.health.connect.client.records.Steps
 import java.time.LocalDateTime
 
 const val MIN_SUPPORTED_SDK = Build.VERSION_CODES.O_MR1
 
 class HealthConnectionManager(context: Context) {
+    val PERMISSIONS = setOf(
+        Permission.createReadPermission(HeartRateSeries::class),
+        Permission.createWritePermission(HeartRateSeries::class),
+        Permission.createReadPermission(Steps::class),
+        Permission.createWritePermission(Steps::class)
+    )
+
     private val healthConnectClient = HealthConnectClient.getOrCreate(context)
 
     val availability = when {
@@ -21,8 +30,9 @@ class HealthConnectionManager(context: Context) {
     /**
      * Checks if all permissions are already granted so there's no need to request them
      */
-    suspend fun hasAllPermissions(permissions: Set<Permission>): Boolean {
-        return permissions == healthConnectClient.permissionController.getGrantedPermissions(permissions)
+    suspend fun hasAllPermissions(): Boolean {
+        val grantedPermissions = healthConnectClient.permissionController.getGrantedPermissions(PERMISSIONS)
+        return grantedPermissions.containsAll(PERMISSIONS)
     }
 
     suspend fun getDaySteps(day: LocalDateTime): Float {

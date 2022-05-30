@@ -3,4 +3,6 @@
     <string name="steps_goal">/10000 STEPS</string>
     <string name="exercise_goal">/30 MIN</string>
     <string name="stand_goal">/12 HRS</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

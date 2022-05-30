@@ -1,6 +1,5 @@
 package com.tommymarto.healthapp.ui
 
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -11,12 +10,10 @@ import androidx.navigation.fragment.findNavController
 import com.tommymarto.healthapp.MainActivity
 import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.databinding.DayFragmentBinding
-import com.tommymarto.healthapp.databinding.WeekFragmentBinding
 import com.tommymarto.healthapp.utils.BarChartProperties
 import com.tommymarto.healthapp.utils.DonutChartProperties
 import com.tommymarto.healthapp.utils.fillBarChart
 import com.tommymarto.healthapp.utils.fillDonutChart
-import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -46,7 +43,7 @@ class DayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.mapView.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_MapsFragment)
+            findNavController().navigate(R.id.action_ViewPagerHostFragment_to_MapsFragment)
         }
     }
 

@@ -21,6 +21,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.tommymarto.healthapp.data.HealthConnectionManager
 import com.tommymarto.healthapp.databinding.ActivityMainBinding
+import com.tommymarto.healthapp.utils.healthConnectManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.PermissionFragment, R.id.ViewPagerHostFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         createNotification()
