@@ -13,6 +13,7 @@ import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.databinding.DayFragmentBinding
 import com.tommymarto.healthapp.utils.*
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -52,7 +53,7 @@ class DayFragment : Fragment() {
         val formattedDate = selectedDay.format(DateTimeFormatter.ofPattern("dd LLLL yyyy"))
         val formattedDay = selectedDay.format(DateTimeFormatter.ofPattern("E"))
 
-        val isToday = DateUtils.isToday(ZonedDateTime.of(selectedDay, ZoneId.systemDefault()).toInstant().toEpochMilli())
+        val isToday = selectedDay.isToday()
         val day = if (isToday) "Today, $formattedDate" else "$formattedDay, $formattedDate"
         (activity as MainActivity).updateTitle(day)
     }
@@ -92,12 +93,12 @@ class DayFragment : Fragment() {
             )
 
             fillDonutChart(
-                binding.chartDaySth,
+                binding.chartDayDistance,
                 standHours,
                 DonutChartProperties(
                     resources.getColor(R.color.brightCyan, activity?.theme),
                     resources.getColor(R.color.backgroundCyan, activity?.theme),
-                    12F
+                    6000F
                 )
             )
         }
@@ -105,6 +106,7 @@ class DayFragment : Fragment() {
         fill(0F, 0F, 0F)
 
         lifecycleScope.launch {
+            healthConnectManager.generateDataIfNotPresent(selectedDay)
             val dayActivity = healthConnectManager.getDayActivity(selectedDay)
             fill(
                 dayActivity.steps.toFloat(),
@@ -120,7 +122,7 @@ class DayFragment : Fragment() {
      *
      */
     private fun fillMovementChart() {
-        val barCount = 48
+        val barCount = 47
         var labels = (0..barCount).map {
             when (it) {
                 barCount / 4 -> "06:00"
@@ -152,7 +154,7 @@ class DayFragment : Fragment() {
             )
 
             fillBarChart(
-                binding.chartDayStandDetails,
+                binding.chartDayDistanceDetails,
                 labels zip distanceDetails,
                 BarChartProperties(
                     resources.getColor(R.color.brightCyan, activity?.theme)
@@ -162,16 +164,29 @@ class DayFragment : Fragment() {
             )
         }
 
-        val dummyValues = (0..barCount).map { (it + 1).toFloat() }
+        val dummyValues = (0..barCount).map { (0).toFloat() }
+        binding.textViewDailySteps.text = "0${resources.getString(R.string.steps_goal)}"
+        binding.textViewDailyExercise.text = "0${resources.getString(R.string.exercise_goal)}"
+        binding.textViewDailyDistance.text = "0${resources.getString(R.string.distance_goal)}"
+
         fill(dummyValues, dummyValues, dummyValues)
 
         lifecycleScope.launch {
+            healthConnectManager.generateDataIfNotPresent(selectedDay)
             val dayActivityDetailed = healthConnectManager.getDayActivityDetailed(selectedDay)
-//            fill(
-//                dayActivity.steps.toFloat(),
-//                dayActivity.activeTime,
-//                dayActivity.distance.toFloat()
-//            )
+            val steps = dayActivityDetailed.map { it.steps.toFloat() }
+            val activeTime = dayActivityDetailed.map { it.activeTime }
+            val distance = dayActivityDetailed.map { it.distance.toFloat() }
+
+            fill(
+                steps,
+                activeTime,
+                distance
+            )
+
+            binding.textViewDailySteps.text = "${steps.sum().toInt()}${resources.getString(R.string.steps_goal)}"
+            binding.textViewDailyExercise.text = "${activeTime.sum().toInt()}${resources.getString(R.string.exercise_goal)}"
+            binding.textViewDailyDistance.text = "${"%5.3f".format(distance.sum()/1000)}${resources.getString(R.string.distance_goal)}"
         }
     }
 }

@@ -2,16 +2,17 @@ package com.tommymarto.healthapp.data
 
 import android.content.Context
 import android.os.Build
+import android.text.format.DateUtils
 import androidx.health.connect.client.HealthConnectClient
 import androidx.health.connect.client.permission.Permission
-import androidx.health.connect.client.records.ActivitySession
-import androidx.health.connect.client.records.Distance
-import androidx.health.connect.client.records.HeartRateSeries
-import androidx.health.connect.client.records.Steps
+import androidx.health.connect.client.records.*
+import androidx.health.connect.client.request.AggregateGroupByDurationRequest
 import androidx.health.connect.client.request.AggregateRequest
-import androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
-import java.time.LocalDateTime
+import com.tommymarto.healthapp.utils.isToday
+import java.time.*
+import java.time.temporal.ChronoUnit
+import kotlin.random.Random
 
 const val MIN_SUPPORTED_SDK = Build.VERSION_CODES.O_MR1
 
@@ -33,7 +34,6 @@ class HealthConnectionManager(context: Context) {
         else -> HealthConnectAvailability.NOT_SUPPORTED
     }
 
-
     /**
      * Checks if all permissions are already granted so there's no need to request them
      */
@@ -42,20 +42,97 @@ class HealthConnectionManager(context: Context) {
         return grantedPermissions.containsAll(PERMISSIONS)
     }
 
-    suspend fun getDayActivityDetailed(day: LocalDateTime): List<ActivitySession> {
+    suspend fun generateDataIfNotPresent(day: LocalDateTime) {
+        val oldData = getDayActivity(day)
+        if (oldData.steps != 0L || oldData.activeTime != 0F || oldData.distance != 0L) {
+            return
+        }
+
+        val numSessions = Random.nextInt(20)
+        val sessions = (0..numSessions).flatMap {
+            val beginningOfDay = day.withHour(0).withMinute(0).withSecond(0)
+            val endOfDay = day.withHour(23).withMinute(59).withSecond(59)
+            val offset = Random.nextDouble()
+            val timezoneOffset = OffsetDateTime.now().offset
+            var start = if (day.isToday()) {
+                beginningOfDay.plusSeconds(
+                    (Duration.between(beginningOfDay, LocalDateTime.now().minusHours(1)).seconds * offset).toLong()
+                ).toInstant(timezoneOffset)
+            } else {
+                beginningOfDay.plusSeconds(
+                    (Duration.between(beginningOfDay, endOfDay.minusHours(1)).seconds * offset).toLong()
+                ).toInstant(timezoneOffset)
+            }
+            val end = start.plusSeconds(60L + Random.nextLong(220L))
+
+            listOf(
+                ActivitySession(
+                    startTime = start,
+                    startZoneOffset = timezoneOffset,
+                    endTime = end,
+                    endZoneOffset = timezoneOffset,
+                    activityType = ActivitySession.ActivityType.RUNNING,
+                    title = "My Run #${Random.nextInt(0, 60)}"
+                ),
+                Steps(
+                    startTime = start,
+                    startZoneOffset = timezoneOffset,
+                    endTime = end,
+                    endZoneOffset = timezoneOffset,
+                    count = (200 + 200 * Random.nextInt(5)).toLong()
+                ),
+                Distance(
+                    startTime = start,
+                    startZoneOffset = timezoneOffset,
+                    endTime = end,
+                    endZoneOffset = timezoneOffset,
+                    distanceMeters = (100 + 100 * Random.nextInt(5)).toDouble()
+                )
+            )
+        }
+
+        healthConnectClient.insertRecords(sessions)
+
+    }
+
+    suspend fun getDayActivityDetailed(day: LocalDateTime): List<HealthActivity> {
         val beginningOfDay = day.withHour(0).withMinute(0).withSecond(0)
         val endOfDay = day.withHour(23).withMinute(59).withSecond(59)
 
-        val request = ReadRecordsRequest(
-            recordType = ActivitySession::class,
-            timeRangeFilter = TimeRangeFilter.Companion.between(beginningOfDay, endOfDay)
+        val aggregateDataTypes = setOf(
+            Steps.COUNT_TOTAL,
+            ActivitySession.ACTIVE_TIME_TOTAL,
+            Distance.DISTANCE_TOTAL
         )
 
-        val response = healthConnectClient.readRecords(request)
-        return response.records
+        val request = AggregateGroupByDurationRequest(
+            metrics = aggregateDataTypes,
+            timeRangeFilter = TimeRangeFilter.Companion.between(beginningOfDay, endOfDay),
+            timeRangeSlicer = Duration.ofMinutes(30)
+        )
+
+        val response = healthConnectClient.aggregateGroupByDuration(request)
+
+        val list = MutableList(48) { HealthActivity(0, 0F, 0) }
+
+        response.forEach { bucket ->
+            val secondsFromBeginningOfDay = (bucket.startTime.epochSecond - beginningOfDay.toEpochSecond(OffsetDateTime.now().offset)).toInt()
+
+            val steps = bucket.result.getMetric(Steps.COUNT_TOTAL)
+            val activeTime = bucket.result.getMetric(ActivitySession.ACTIVE_TIME_TOTAL)?.seconds?.toFloat()?.div(60)
+            val distance = bucket.result.getMetric(Distance.DISTANCE_TOTAL)?.toLong()
+
+            list[(secondsFromBeginningOfDay / 60) / 30] = HealthActivity(
+                steps ?: 0,
+                activeTime ?: 0F,
+                distance ?: 0
+            )
+        }
+
+        return list
     }
 
-    suspend fun getDayActivity(day: LocalDateTime): DayActivity {
+    suspend fun getDayActivity(day: LocalDateTime): HealthActivity {
         val beginningOfDay = day.withHour(0).withMinute(0).withSecond(0)
         val endOfDay = day.withHour(23).withMinute(59).withSecond(59)
 
@@ -75,21 +152,14 @@ class HealthConnectionManager(context: Context) {
         val activeTime = response.getMetric(ActivitySession.ACTIVE_TIME_TOTAL)?.seconds?.toFloat()?.div(60)
         val distance = response.getMetric(Distance.DISTANCE_TOTAL)?.toLong()
 
-        return DayActivity(
+        return HealthActivity(
              steps ?: 0,
              activeTime ?: 0F,
              distance ?: 0
         )
     }
 
-    suspend fun getDayExercise(day: LocalDateTime): Float {
-        return (Math.random() * 31).toFloat()
-    }
-    suspend fun getDayStand(day: LocalDateTime): Float {
-        return (Math.random() * 12.5).toFloat()
-    }
-
-    data class DayActivity(
+    data class HealthActivity(
         val steps: Long,
         val activeTime: Float,
         val distance: Long

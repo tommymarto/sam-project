@@ -63,7 +63,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewMon" />
 
             <com.db.williamchart.view.DonutChartView
-                android:id="@+id/chartMonSth"
+                android:id="@+id/chartMonDistance"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="23dp"
@@ -115,7 +115,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewTue" />
 
             <com.db.williamchart.view.DonutChartView
-                android:id="@+id/chartTueSth"
+                android:id="@+id/chartTueDistance"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="23dp"
@@ -167,7 +167,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewWed" />
 
             <com.db.williamchart.view.DonutChartView
-                android:id="@+id/chartWedSth"
+                android:id="@+id/chartWedDistance"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="23dp"
@@ -219,7 +219,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewThu" />
 
             <com.db.williamchart.view.DonutChartView
-                android:id="@+id/chartThuSth"
+                android:id="@+id/chartThuDistance"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="23dp"
@@ -271,7 +271,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewFri" />
 
             <com.db.williamchart.view.DonutChartView
-                android:id="@+id/chartFriSth"
+                android:id="@+id/chartFriDistance"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="23dp"
@@ -323,7 +323,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewSat" />
 
             <com.db.williamchart.view.DonutChartView
-                android:id="@+id/chartSatSth"
+                android:id="@+id/chartSatDistance"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="23dp"
@@ -375,7 +375,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewSun" />
 
             <com.db.williamchart.view.DonutChartView
-                android:id="@+id/chartSunSth"
+                android:id="@+id/chartSunDistance"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="23dp"

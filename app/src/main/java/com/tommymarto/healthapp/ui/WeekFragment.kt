@@ -2,17 +2,19 @@ package com.tommymarto.healthapp.ui
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.db.williamchart.view.DonutChartView
 import com.tommymarto.healthapp.R
-import com.tommymarto.healthapp.databinding.DayFragmentBinding
 import com.tommymarto.healthapp.databinding.WeekFragmentBinding
 import com.tommymarto.healthapp.utils.DonutChartProperties
 import com.tommymarto.healthapp.utils.fillDonutChart
 import com.tommymarto.healthapp.utils.healthConnectManager
+import com.tommymarto.healthapp.utils.weekOfYear
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 
@@ -31,10 +33,17 @@ class WeekFragment : Fragment() {
     ): View? {
         _binding = WeekFragmentBinding.inflate(inflater, container, false)
 
-        fillActivityDonutCharts()
-        updateSelectedDay()
+        initActivityDonutCharts()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        updateSelectedDay()
+        initActivityDonutCharts()
+        fillActivityDonutCharts()
     }
 
     override fun onDestroyView() {
@@ -70,90 +79,113 @@ class WeekFragment : Fragment() {
         }
     }
 
-    private fun fillActivityDonutCharts() {
-        data class ActivityDonut(
-            val chartSteps: DonutChartView,
-            val chartExercise: DonutChartView,
-            val chartSth: DonutChartView
-        )
+    /**
+     *  Chart stuff
+     */
 
-        val days = listOf(
+    private data class ActivityDonut(
+        val chartSteps: DonutChartView,
+        val chartExercise: DonutChartView,
+        val chartDistance: DonutChartView
+    )
+
+    private val days by lazy {
+        listOf(
             ActivityDonut(
                 binding.chartMonSteps,
                 binding.chartMonExercise,
-                binding.chartMonSth
+                binding.chartMonDistance
             ),
             ActivityDonut(
                 binding.chartTueSteps,
                 binding.chartTueExercise,
-                binding.chartTueSth
+                binding.chartTueDistance
             ),
             ActivityDonut(
                 binding.chartWedSteps,
                 binding.chartWedExercise,
-                binding.chartWedSth
+                binding.chartWedDistance
             ),
             ActivityDonut(
                 binding.chartThuSteps,
                 binding.chartThuExercise,
-                binding.chartThuSth
+                binding.chartThuDistance
             ),
             ActivityDonut(
                 binding.chartFriSteps,
                 binding.chartFriExercise,
-                binding.chartFriSth
+                binding.chartFriDistance
             ),
             ActivityDonut(
                 binding.chartSatSteps,
                 binding.chartSatExercise,
-                binding.chartSatSth
+                binding.chartSatDistance
             ),
             ActivityDonut(
                 binding.chartSunSteps,
                 binding.chartSunExercise,
-                binding.chartSunSth
+                binding.chartSunDistance
+            )
+        )
+    }
+
+    private fun initActivityDonutCharts() {
+        days.forEach { fillDonut(it, 0F, 0F, 0F) }
+    }
+
+    private fun fillActivityDonutCharts() {
+        val today = LocalDateTime.now()
+        val first = if (selectedDay.weekOfYear == today.weekOfYear) today.dayOfWeek.ordinal else 6
+
+        val dates = (selectedDay.dayOfWeek.ordinal downTo 0).map { selectedDay.minusDays(it.toLong()) } +
+                    (1..(6 - selectedDay.dayOfWeek.ordinal)).map { selectedDay.plusDays(it.toLong()) }
+
+        (first downTo 0).forEach {
+            lifecycleScope.launch {
+                healthConnectManager.generateDataIfNotPresent(dates[it])
+                val dayActivity = healthConnectManager.getDayActivity(dates[it])
+                fillDonut(
+                    days[it],
+                    dayActivity.steps.toFloat(),
+                    dayActivity.activeTime,
+                    dayActivity.distance.toFloat()
+                )
+            }
+        }
+    }
+
+    private fun fillDonut(donut: ActivityDonut, steps: Float, exerciseMinutes: Float, distance: Float) {
+        fillDonutChart(
+            donut.chartSteps,
+            steps,
+            DonutChartProperties(
+                resources.getColor(R.color.brightDarkRed, activity?.theme),
+                resources.getColor(R.color.backgroundDarkRed, activity?.theme),
+                10000F,
+                18F
             )
         )
 
-        days.forEach {
-            val steps = 7832F
-            val exerciseMinutes = 18F
-            val standHours = 11F
-
-            fillDonutChart(
-                it.chartSteps,
-                steps,
-                DonutChartProperties(
-                    resources.getColor(R.color.brightDarkRed, activity?.theme),
-                    resources.getColor(R.color.backgroundDarkRed, activity?.theme),
-                    10000F,
-                    18F
-                )
+        fillDonutChart(
+            donut.chartExercise,
+            exerciseMinutes,
+            DonutChartProperties(
+                resources.getColor(R.color.brightGreen, activity?.theme),
+                resources.getColor(R.color.backgroundGreen, activity?.theme),
+                30F,
+                18F
             )
+        )
 
-            fillDonutChart(
-                it.chartExercise,
-                exerciseMinutes,
-                DonutChartProperties(
-                    resources.getColor(R.color.brightGreen, activity?.theme),
-                    resources.getColor(R.color.backgroundGreen, activity?.theme),
-                    30F,
-                    18F
-                )
+        fillDonutChart(
+            donut.chartDistance,
+            distance,
+            DonutChartProperties(
+                resources.getColor(R.color.brightCyan, activity?.theme),
+                resources.getColor(R.color.backgroundCyan, activity?.theme),
+                6000F,
+                18F
             )
-
-            fillDonutChart(
-                it.chartSth,
-                standHours,
-                DonutChartProperties(
-                    resources.getColor(R.color.brightCyan, activity?.theme),
-                    resources.getColor(R.color.backgroundCyan, activity?.theme),
-                    12F,
-                    18F
-                )
-            )
-        }
-
-
+        )
     }
 }

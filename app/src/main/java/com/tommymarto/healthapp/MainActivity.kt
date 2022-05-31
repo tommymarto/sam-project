@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.WindowCompat
 import androidx.health.connect.client.permission.HealthDataRequestPermissions
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -22,6 +23,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.tommymarto.healthapp.data.HealthConnectionManager
 import com.tommymarto.healthapp.databinding.ActivityMainBinding
 import com.tommymarto.healthapp.utils.healthConnectManager
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 
 class MainActivity : AppCompatActivity() {

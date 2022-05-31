@@ -41,13 +41,18 @@ class ViewPagerHostFragment : Fragment() {
 
             val newWeekPos = weekViewPager.currentItem + (lastPageDay.weekOfYear - dayFragment.selectedDay.weekOfYear)
             if (newWeekPos != weekViewPager.currentItem) {
+                val direction = -(newWeekPos - weekViewPager.currentItem)
+
                 weekViewPager.setCurrentItem(newWeekPos, true)
                 weekFragment = weekPagerAdapter.getFragment(newWeekPos)
-                weekFragment.selectedDay = dayFragment.selectedDay
+                weekFragment.selectedDay = lastPageDay.plusDays(direction.toLong())
             } else {
                 weekFragment.selectedDay = dayFragment.selectedDay
                 weekFragment.updateSelectedDay()
             }
+
+            println("weekFragment: $newWeekPos, dayFragment: $position")
+            println("week: ${weekFragment.selectedDay}, day: ${dayFragment.selectedDay}")
 
             _lastPageSelected = dayFragment
         }

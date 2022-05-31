@@ -1,7 +1,10 @@
 package com.tommymarto.healthapp.utils
 
+import android.text.format.DateUtils
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import kotlin.math.floor
 
 val LocalDateTime.weekOfYear: Int
@@ -14,3 +17,7 @@ val LocalDateTime.weekOfYear: Int
             it + 1 + if (weekDayFromNewYear.dayOfWeek.ordinal < firstDayOfYear.dayOfWeek.ordinal) 1 else 0
         }
     }
+
+fun LocalDateTime.isToday(): Boolean {
+    return DateUtils.isToday(ZonedDateTime.of(this, ZoneId.systemDefault()).toInstant().toEpochMilli())
+}
