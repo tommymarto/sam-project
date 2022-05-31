@@ -28,18 +28,20 @@ class PermissionFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        val launcher = registerForActivityResult(HealthDataRequestPermissions()) { granted ->
+            if (granted.containsAll(this@PermissionFragment.healthConnectManager.PERMISSIONS)) {
+                findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
+            } else {
+                throw Exception("Permission Denied")
+            }
+        }
+
         lifecycleScope.launch {
-//            if(healthConnectManager.hasAllPermissions()) {
-//                findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
-//            } else {
-                registerForActivityResult(HealthDataRequestPermissions()) { granted ->
-                    if (granted.containsAll(this@PermissionFragment.healthConnectManager.PERMISSIONS)) {
-                        findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
-                    } else {
-                        throw Exception("Permission Denied")
-                    }
-                }.launch(healthConnectManager.PERMISSIONS)
-//            }
+            if(healthConnectManager.hasAllPermissions()) {
+                findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
+            } else {
+                launcher.launch(healthConnectManager.PERMISSIONS)
+            }
         }
 
         super.onCreate(savedInstanceState)
