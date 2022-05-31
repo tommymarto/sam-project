@@ -79,14 +79,14 @@ class HealthConnectionManager(context: Context) {
                     startZoneOffset = timezoneOffset,
                     endTime = end,
                     endZoneOffset = timezoneOffset,
-                    count = (200 + 200 * Random.nextInt(5)).toLong()
+                    count = (200 + 67 * Random.nextInt(3, 11)).toLong()
                 ),
                 Distance(
                     startTime = start,
                     startZoneOffset = timezoneOffset,
                     endTime = end,
                     endZoneOffset = timezoneOffset,
-                    distanceMeters = (100 + 100 * Random.nextInt(5)).toDouble()
+                    distanceMeters = (100 + 97 * Random.nextInt(5)).toDouble()
                 )
             )
         }
