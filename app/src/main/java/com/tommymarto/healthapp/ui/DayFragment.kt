@@ -6,14 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.tommymarto.healthapp.MainActivity
 import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.databinding.DayFragmentBinding
-import com.tommymarto.healthapp.utils.BarChartProperties
-import com.tommymarto.healthapp.utils.DonutChartProperties
-import com.tommymarto.healthapp.utils.fillBarChart
-import com.tommymarto.healthapp.utils.fillDonutChart
+import com.tommymarto.healthapp.utils.*
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -71,39 +70,48 @@ class DayFragment : Fragment() {
      *
      */
     private fun fillActivityDonutChart() {
-        val steps = 7538F
-        val exerciseMinutes = 13F
-        val standHours = 11F
-
-        fillDonutChart(
-            binding.chartDaySteps,
-            steps,
-            DonutChartProperties(
-                resources.getColor(R.color.brightDarkRed, activity?.theme),
-                resources.getColor(R.color.backgroundDarkRed, activity?.theme),
-                10000F
+        fun fill(steps: Float, exerciseMinutes: Float, standHours: Float) {
+            fillDonutChart(
+                binding.chartDaySteps,
+                steps,
+                DonutChartProperties(
+                    resources.getColor(R.color.brightDarkRed, activity?.theme),
+                    resources.getColor(R.color.backgroundDarkRed, activity?.theme),
+                    10000F
+                )
             )
-        )
 
-        fillDonutChart(
-            binding.chartDayExercise,
-            exerciseMinutes,
-            DonutChartProperties(
-                resources.getColor(R.color.brightGreen, activity?.theme),
-                resources.getColor(R.color.backgroundGreen, activity?.theme),
-                30F
+            fillDonutChart(
+                binding.chartDayExercise,
+                exerciseMinutes,
+                DonutChartProperties(
+                    resources.getColor(R.color.brightGreen, activity?.theme),
+                    resources.getColor(R.color.backgroundGreen, activity?.theme),
+                    30F
+                )
             )
-        )
 
-        fillDonutChart(
-            binding.chartDaySth,
-            standHours,
-            DonutChartProperties(
-                resources.getColor(R.color.brightCyan, activity?.theme),
-                resources.getColor(R.color.backgroundCyan, activity?.theme),
-                12F
+            fillDonutChart(
+                binding.chartDaySth,
+                standHours,
+                DonutChartProperties(
+                    resources.getColor(R.color.brightCyan, activity?.theme),
+                    resources.getColor(R.color.backgroundCyan, activity?.theme),
+                    12F
+                )
             )
-        )
+        }
+
+        fill(0F, 0F, 0F)
+
+        lifecycleScope.launch {
+            val dayActivity = healthConnectManager.getDayActivity(selectedDay)
+            fill(
+                dayActivity.steps.toFloat(),
+                dayActivity.activeTime,
+                dayActivity.distance.toFloat()
+            )
+        }
     }
 
     /**
@@ -114,44 +122,56 @@ class DayFragment : Fragment() {
     private fun fillMovementChart() {
         val barCount = 48
         var labels = (0..barCount).map {
-            when(it) {
-                    barCount/4 -> "06:00"
-                2 * barCount/4 -> "12:00"
-                3 * barCount/4 -> "18:00"
+            when (it) {
+                barCount / 4 -> "06:00"
+                2 * barCount / 4 -> "12:00"
+                3 * barCount / 4 -> "18:00"
                 else -> ""
             }
         }
-        val values = (0..barCount).map { (it + 1).toFloat() }
-        val entries = labels zip values
 
-        fillBarChart(
-            binding.chartDayStepsDetails,
-            entries,
-            BarChartProperties(
-                resources.getColor(R.color.brightDarkRed, activity?.theme)
-            ),
-            resources,
-            activity
-        )
+        fun fill(stepsDetails: List<Float>, exerciseDetails: List<Float>, distanceDetails: List<Float>) {
+            fillBarChart(
+                binding.chartDayStepsDetails,
+                labels zip stepsDetails,
+                BarChartProperties(
+                    resources.getColor(R.color.brightDarkRed, activity?.theme)
+                ),
+                resources,
+                activity
+            )
 
-        fillBarChart(
-            binding.chartDayExerciseDetails,
-            entries,
-            BarChartProperties(
-                resources.getColor(R.color.brightGreen, activity?.theme)
-            ),
-            resources,
-            activity
-        )
+            fillBarChart(
+                binding.chartDayExerciseDetails,
+                labels zip exerciseDetails,
+                BarChartProperties(
+                    resources.getColor(R.color.brightGreen, activity?.theme)
+                ),
+                resources,
+                activity
+            )
 
-        fillBarChart(
-            binding.chartDayStandDetails,
-            entries,
-            BarChartProperties(
-                resources.getColor(R.color.brightCyan, activity?.theme)
-            ),
-            resources,
-            activity
-        )
+            fillBarChart(
+                binding.chartDayStandDetails,
+                labels zip distanceDetails,
+                BarChartProperties(
+                    resources.getColor(R.color.brightCyan, activity?.theme)
+                ),
+                resources,
+                activity
+            )
+        }
+
+        val dummyValues = (0..barCount).map { (it + 1).toFloat() }
+        fill(dummyValues, dummyValues, dummyValues)
+
+        lifecycleScope.launch {
+            val dayActivityDetailed = healthConnectManager.getDayActivityDetailed(selectedDay)
+//            fill(
+//                dayActivity.steps.toFloat(),
+//                dayActivity.activeTime,
+//                dayActivity.distance.toFloat()
+//            )
+        }
     }
 }
