@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 import kotlin.math.ceil
 
 
-const val TOTAL_DAYS = 301
+const val TOTAL_DAYS = 31
 const val TOTAL_WEEKS = (TOTAL_DAYS/7) + 1
 
 class ViewPagerHostFragment : Fragment() {
