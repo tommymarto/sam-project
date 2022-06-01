@@ -18,6 +18,15 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 
+/**
+ *      KNOWN ISSUE:
+ *      When charts are used in a RecyclerView (and ViewPager2 uses a RecyclerView underneath),
+ *          the chartConfiguration property might not be correctly initialized (the cause of the issue is still unknown)
+ *      To mitigate this effect, charts are initialized with dummy data (zeroes) and then, asynchronously updated
+ *          with real data coming from HealthConnect
+ *      https://github.com/diogobernardino/williamchart/issues/283
+ */
+
 class WeekFragment : Fragment() {
 
     // This property is only valid between onCreateView and
