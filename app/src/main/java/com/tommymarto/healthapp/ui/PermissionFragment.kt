@@ -26,13 +26,18 @@ class PermissionFragment : Fragment() {
     private var _binding: PermissionFragmentBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        _binding = PermissionFragmentBinding.inflate(inflater, container, false)
 
         val launcher = registerForActivityResult(HealthDataRequestPermissions()) { granted ->
             if (granted.containsAll(this@PermissionFragment.healthConnectManager.PERMISSIONS)) {
                 findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
             } else {
-                throw Exception("Permission Denied")
+                binding.textViewPermissions.visibility = View.VISIBLE
             }
         }
 
@@ -44,15 +49,6 @@ class PermissionFragment : Fragment() {
             }
         }
 
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        _binding = PermissionFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 }
