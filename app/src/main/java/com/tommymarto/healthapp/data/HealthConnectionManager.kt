@@ -17,6 +17,8 @@ import kotlin.random.Random
 const val MIN_SUPPORTED_SDK = Build.VERSION_CODES.O_MR1
 
 class HealthConnectionManager(context: Context) {
+    private val context = context
+
     val PERMISSIONS = setOf(
         Permission.createReadPermission(Distance::class),
         Permission.createWritePermission(Distance::class),
@@ -26,13 +28,16 @@ class HealthConnectionManager(context: Context) {
         Permission.createWritePermission(Steps::class)
     )
 
-    private val healthConnectClient = HealthConnectClient.getOrCreate(context)
+    private val healthConnectClient by lazy { HealthConnectClient.getOrCreate(context) }
 
-    val availability = when {
-        HealthConnectClient.isAvailable(context) -> HealthConnectAvailability.INSTALLED
-        (Build.VERSION.SDK_INT >= MIN_SUPPORTED_SDK) -> HealthConnectAvailability.NOT_INSTALLED
-        else -> HealthConnectAvailability.NOT_SUPPORTED
-    }
+    val availability: HealthConnectAvailability
+        get() {
+            return when {
+                HealthConnectClient.isAvailable(context) -> HealthConnectAvailability.INSTALLED
+                (Build.VERSION.SDK_INT >= MIN_SUPPORTED_SDK) -> HealthConnectAvailability.NOT_INSTALLED
+                else -> HealthConnectAvailability.NOT_SUPPORTED
+            }
+        }
 
     /**
      * Checks if all permissions are already granted so there's no need to request them
