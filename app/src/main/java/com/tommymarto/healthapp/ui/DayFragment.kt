@@ -212,7 +212,7 @@ class DayFragment : Fragment() {
             val topLeft = LatLng(36.34, -115.34)
             val bottomRight = LatLng(36.0, -114.99)
 
-            var startPoint = randomLatLng(topLeft, bottomRight)
+            val startPoint = randomLatLng(topLeft, bottomRight)
             val path = mutableListOf(startPoint)
 
             while (SphericalUtil.computeLength(path) < 0.9 * todayDistance) {
@@ -228,6 +228,16 @@ class DayFragment : Fragment() {
             return path
         }
 
+        suspend fun getOrGeneratePath(): List<LatLng> {
+            var data = dbClient.getDayPath(selectedDay)
+            if (data.isEmpty()) {
+                data = generatePath()
+                dbClient.insertDay(selectedDay, data)
+            }
+
+            return data
+        }
+
         fun getBoundsFromPath(path: List<LatLng>): LatLngBounds {
             val boundsBuilder = LatLngBounds.builder()
             path.forEach { boundsBuilder.include(it) }
@@ -241,7 +251,7 @@ class DayFragment : Fragment() {
                 val googleMap: GoogleMap = mapFragment.awaitMap()
                 googleMap.uiSettings.setAllGesturesEnabled(false)
 
-                val polylinePoints = generatePath()
+                val polylinePoints = getOrGeneratePath()
                 val polyline = PolylineOptions()
                     .addAll(polylinePoints)
                     .jointType(JointType.ROUND)
