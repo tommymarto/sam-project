@@ -7,4 +7,4 @@ import com.tommymarto.healthapp.data.HealthConnectionManager
 
 var Fragment.healthConnectManager: HealthConnectionManager
     get() = (requireActivity().application as App).healthConnectManager
-    private set(value) {}
+    private set(_) {}

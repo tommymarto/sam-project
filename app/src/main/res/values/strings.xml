@@ -3,4 +3,5 @@
     <string name="steps_goal">/10000 STEPS</string>
     <string name="exercise_goal">/30 MIN</string>
     <string name="distance_goal">/6 KM</string>
+    <string name="health_connect_download">market://details?id=com.google.android.apps.healthdata</string>
 </resources>

@@ -26,7 +26,7 @@ class HealthConnectionManager(context: Context) {
         Permission.createWritePermission(Steps::class)
     )
 
-    private val healthConnectClient = HealthConnectClient.getOrCreate(context)
+    private val healthConnectClient by lazy { HealthConnectClient.getOrCreate(context) }
 
     val availability = when {
         HealthConnectClient.isAvailable(context) -> HealthConnectAvailability.INSTALLED

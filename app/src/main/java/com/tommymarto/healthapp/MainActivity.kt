@@ -3,7 +3,6 @@ package com.tommymarto.healthapp
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -13,18 +12,11 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.WindowCompat
-import androidx.health.connect.client.permission.HealthDataRequestPermissions
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.tommymarto.healthapp.data.HealthConnectionManager
 import com.tommymarto.healthapp.databinding.ActivityMainBinding
-import com.tommymarto.healthapp.utils.healthConnectManager
-import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -45,10 +36,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         createNotification()
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

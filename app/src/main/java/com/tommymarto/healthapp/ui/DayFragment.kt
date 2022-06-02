@@ -51,7 +51,10 @@ class DayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.mapView.setOnClickListener {
+//        binding.mapView.setOnClickListener {
+//            findNavController().navigate(R.id.action_ViewPagerHostFragment_to_MapsFragment)
+//        }
+        binding.openInMaps.setOnClickListener {
             findNavController().navigate(R.id.action_ViewPagerHostFragment_to_MapsFragment)
         }
     }

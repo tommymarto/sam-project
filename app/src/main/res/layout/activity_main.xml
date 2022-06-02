@@ -23,3 +23,23 @@
     <include layout="@layout/content_main" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".MainActivity">-->
+
+<!--    <fragment-->
+<!--        class="com.google.android.gms.maps.SupportMapFragment"-->
+<!--        android:id="@+id/map_fragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; hack to fix ugly black artefact with maps v2 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <FrameLayout&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_height="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:background="@android:color/transparent" />&ndash;&gt;-->
+
+<!--</FrameLayout>-->
