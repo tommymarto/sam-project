@@ -8,6 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.ktx.awaitMap
 import com.tommymarto.healthapp.MainActivity
 import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.databinding.DayFragmentBinding
@@ -44,16 +50,9 @@ class DayFragment : Fragment() {
 
         fillActivityDonutChart()
         fillMovementChart()
+        fillMap()
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.mapView.setOnClickListener {
-            findNavController().navigate(R.id.action_ViewPagerHostFragment_to_MapsFragment)
-        }
     }
 
     override fun onResume() {
@@ -196,6 +195,18 @@ class DayFragment : Fragment() {
             binding.textViewDailySteps.text = "${steps.sum().toInt()}${resources.getString(R.string.steps_goal)}"
             binding.textViewDailyExercise.text = "${activeTime.sum().toInt()}${resources.getString(R.string.exercise_goal)}"
             binding.textViewDailyDistance.text = "${"%5.3f".format(distance.sum()/1000)}${resources.getString(R.string.distance_goal)}"
+        }
+    }
+
+    private fun fillMap() {
+        lifecycleScope.launchWhenCreated {
+            val mapFragment: SupportMapFragment = childFragmentManager.findFragmentById(R.id.dayMap) as SupportMapFragment
+            val googleMap: GoogleMap = mapFragment.awaitMap()
+
+            val sydney = LatLng(-34.0, 151.0)
+            googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+            googleMap.uiSettings.setAllGesturesEnabled(false)
         }
     }
 }
