@@ -217,7 +217,7 @@ class DayFragment : Fragment() {
 
             while (SphericalUtil.computeLength(path) < 0.9 * todayDistance) {
                 val nextPoint = randomLatLng(topLeft, bottomRight)
-                if (SphericalUtil.computeDistanceBetween(path.last(), nextPoint) > 1000) {
+                if (SphericalUtil.computeDistanceBetween(path.last(), nextPoint) > max(0.2 * todayDistance, 100.0)) {
                     continue
                 }
                 if (SphericalUtil.computeLength(path + listOf(nextPoint)) < 1.1 * todayDistance) {
