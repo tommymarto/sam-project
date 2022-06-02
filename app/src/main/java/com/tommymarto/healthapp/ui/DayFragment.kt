@@ -11,19 +11,24 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.google.maps.android.SphericalUtil
 import com.google.maps.android.ktx.awaitMap
+import com.google.maps.android.ktx.awaitMapLoad
 import com.tommymarto.healthapp.MainActivity
 import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.databinding.DayFragmentBinding
 import com.tommymarto.healthapp.utils.*
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.Double.max
+import java.lang.Double.min
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
 /**
  *      KNOWN ISSUE:
@@ -78,6 +83,9 @@ class DayFragment : Fragment() {
      *
      *
      */
+
+    private lateinit var gatherTodayData: Job
+    private var todayDistance = 0F
     private fun fillActivityDonutChart() {
         fun fill(steps: Float, exerciseMinutes: Float, standHours: Float) {
             fillDonutChart(
@@ -113,7 +121,7 @@ class DayFragment : Fragment() {
 
         fill(0F, 0F, 0F)
 
-        lifecycleScope.launch {
+        gatherTodayData = lifecycleScope.launch {
             healthConnectManager.generateDataIfNotPresent(selectedDay)
             val dayActivity = healthConnectManager.getDayActivity(selectedDay)
             fill(
@@ -121,6 +129,7 @@ class DayFragment : Fragment() {
                 dayActivity.activeTime,
                 dayActivity.distance.toFloat()
             )
+            todayDistance = dayActivity.distance.toFloat()
         }
     }
 
@@ -199,14 +208,66 @@ class DayFragment : Fragment() {
     }
 
     private fun fillMap() {
-        lifecycleScope.launchWhenCreated {
-            val mapFragment: SupportMapFragment = childFragmentManager.findFragmentById(R.id.dayMap) as SupportMapFragment
-            val googleMap: GoogleMap = mapFragment.awaitMap()
+        fun generatePath(): List<LatLng> {
+            val topLeft = LatLng(36.34, -115.34)
+            val bottomRight = LatLng(36.0, -114.99)
 
-            val sydney = LatLng(-34.0, 151.0)
-            googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-            googleMap.uiSettings.setAllGesturesEnabled(false)
+            var startPoint = randomLatLng(topLeft, bottomRight)
+            val path = mutableListOf(startPoint)
+
+            while (SphericalUtil.computeLength(path) < 0.9 * todayDistance) {
+                val nextPoint = randomLatLng(topLeft, bottomRight)
+                if (SphericalUtil.computeDistanceBetween(path.last(), nextPoint) > 1000) {
+                    continue
+                }
+                if (SphericalUtil.computeLength(path + listOf(nextPoint)) < 1.1 * todayDistance) {
+                    path.add(nextPoint)
+                }
+            }
+
+            return path
+        }
+
+        fun getBoundsFromPath(path: List<LatLng>): LatLngBounds {
+            val boundsBuilder = LatLngBounds.builder()
+            path.forEach { boundsBuilder.include(it) }
+
+            return boundsBuilder.build()
+        }
+
+        gatherTodayData.invokeOnCompletion {
+            lifecycleScope.launchWhenCreated {
+                val mapFragment: SupportMapFragment = childFragmentManager.findFragmentById(R.id.dayMap) as SupportMapFragment
+                val googleMap: GoogleMap = mapFragment.awaitMap()
+                googleMap.uiSettings.setAllGesturesEnabled(false)
+
+                val polylinePoints = generatePath()
+                val polyline = PolylineOptions()
+                    .addAll(polylinePoints)
+                    .jointType(JointType.ROUND)
+
+                googleMap.addPolyline(polyline)
+
+                // update camera only after map has loaded because of internal calculation
+                // done by maps to correctly center the camera considering the container size
+                googleMap.awaitMapLoad()
+                val bounds = getBoundsFromPath(polylinePoints)
+                val camera = CameraUpdateFactory
+                    .newLatLngBounds(bounds, 50)
+                googleMap.moveCamera(camera)
+
+            }
         }
     }
 }
+
+fun randomLatLng(topLeft: LatLng, bottomRight: LatLng): LatLng {
+    val latMin = min(bottomRight.latitude, topLeft.latitude)
+    val latMax = max(bottomRight.latitude, topLeft.latitude)
+    val lngMin = min(bottomRight.longitude, topLeft.longitude)
+    val lngMax = max(bottomRight.longitude, topLeft.longitude)
+    val lat = Random.nextDouble(latMin, latMax)
+    val lng = Random.nextDouble(lngMin, lngMax)
+    return LatLng(lat, lng)
+}
+
