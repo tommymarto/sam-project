@@ -1,13 +1,11 @@
 package com.tommymarto.healthapp.ui
 
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -23,10 +21,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.Double.max
 import java.lang.Double.min
-import java.text.DecimalFormat
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
@@ -87,7 +82,7 @@ class DayFragment : Fragment() {
     private lateinit var gatherTodayData: Job
     private var todayDistance = 0F
     private fun fillActivityDonutChart() {
-        fun fill(steps: Float, exerciseMinutes: Float, standHours: Float) {
+        fun fill(steps: Float, exerciseMinutes: Float, distance: Float) {
             fillDonutChart(
                 binding.chartDaySteps,
                 steps,
@@ -110,7 +105,7 @@ class DayFragment : Fragment() {
 
             fillDonutChart(
                 binding.chartDayDistance,
-                standHours,
+                distance,
                 DonutChartProperties(
                     resources.getColor(R.color.brightCyan, activity?.theme),
                     resources.getColor(R.color.backgroundCyan, activity?.theme),

@@ -1,30 +1,19 @@
 package com.tommymarto.healthapp
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.WindowCompat
-import androidx.health.connect.client.permission.HealthDataRequestPermissions
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.tommymarto.healthapp.data.HealthConnectionManager
 import com.tommymarto.healthapp.databinding.ActivityMainBinding
-import com.tommymarto.healthapp.utils.healthConnectManager
-import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import com.tommymarto.healthapp.utils.NOTIFICATION_ID
+import com.tommymarto.healthapp.utils.createChannel
+import com.tommymarto.healthapp.utils.createNotification
+import com.tommymarto.healthapp.utils.notifyNotification
 
 
 class MainActivity : AppCompatActivity() {
@@ -43,11 +32,11 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(setOf(R.id.PermissionFragment, R.id.ViewPagerHostFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        createNotification()
-    }
-
-    override fun onStart() {
-        super.onStart()
+        lifecycleScope.launchWhenStarted {
+            createChannel(this@MainActivity)
+            val notification = createNotification(this@MainActivity)
+            notifyNotification(this@MainActivity, NOTIFICATION_ID, notification)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -74,42 +63,5 @@ class MainActivity : AppCompatActivity() {
 
     fun updateTitle(title: String) {
         binding.toolbar.title = title
-    }
-
-    private fun createNotification() {
-        val name = "Daily Progress"
-        val descriptionText = "Shows the current status towards the step goal"
-        val importance = NotificationManager.IMPORTANCE_LOW
-        val channelId = "dailyprogress"
-        val mChannel = NotificationChannel(channelId, name, importance)
-        mChannel.description = descriptionText
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(mChannel)
-
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-        val d = ResourcesCompat.getDrawable(resources, R.drawable.day_letter_background, theme)
-        val largeIcon = drawableToBitmap(d!!)
-        val notification = notificationBuilder
-            .setContentText("boia")
-            .setSmallIcon(R.drawable.day_letter_background)
-            .setLargeIcon(largeIcon)
-            .setOngoing(true)
-            .build()
-
-        println("largeIcon: $largeIcon")
-
-        notificationManager.notify(0, notification)
-    }
-
-    fun drawableToBitmap(drawable: Drawable): Bitmap? {
-        if (drawable is BitmapDrawable) {
-            return drawable.bitmap
-        }
-        val bitmap =
-            Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        return bitmap
     }
 }
