@@ -1,5 +1,6 @@
 package com.tommymarto.healthapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,10 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.tommymarto.healthapp.databinding.ActivityMainBinding
-import com.tommymarto.healthapp.utils.NOTIFICATION_ID
-import com.tommymarto.healthapp.utils.createChannel
-import com.tommymarto.healthapp.utils.createNotification
-import com.tommymarto.healthapp.utils.notifyNotification
+import com.tommymarto.healthapp.utils.setApplication
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,10 +30,9 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(setOf(R.id.PermissionFragment, R.id.ViewPagerHostFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        lifecycleScope.launchWhenStarted {
-            createChannel(this@MainActivity)
-            val notification = createNotification(this@MainActivity)
-            notifyNotification(this@MainActivity, NOTIFICATION_ID, notification)
+        lifecycleScope.launchWhenCreated {
+            setApplication(application as App)
+            startService(Intent(this@MainActivity, ActivityForegroundService::class.java))
         }
     }
 

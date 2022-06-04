@@ -7,17 +7,31 @@
     tools:background="#FF555555">
 
     <TextView
-        android:layout_width="70dp"
-        android:layout_height="20dp"
+        android:layout_width="194dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="12dp"
+        android:text="Today's fitness report:"
         android:textColor="@color/white"
-        android:text="Boia" />
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textPhrase"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="38dp"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        tools:text="You're almost there! Keep up the good work!" />
 
     <ImageView
-        android:id="@+id/notification_image"
+        android:id="@+id/notificationImage"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_alignParentTop="true"

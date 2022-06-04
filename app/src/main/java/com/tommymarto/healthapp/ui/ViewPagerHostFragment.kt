@@ -11,7 +11,6 @@ import com.tommymarto.healthapp.databinding.ViewPagerHostFragmentBinding
 import com.tommymarto.healthapp.utils.weekOfYear
 import java.lang.ref.WeakReference
 import java.time.LocalDateTime
-import kotlin.math.ceil
 
 
 const val TOTAL_DAYS = 31
@@ -29,14 +28,14 @@ class ViewPagerHostFragment : Fragment() {
     private lateinit var dayViewPager: ViewPager2
     private lateinit var dayPagerAdapter: DailyViewPagerAdapter
     private var onDayChangeCallback = object: ViewPager2.OnPageChangeCallback() {
-        private var _lastPageSelected: DayFragment? = null
+        private var lastPageSelected: DayFragment? = null
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
 
             val dayFragment = dayPagerAdapter.getFragment(position)
             var weekFragment = weekPagerAdapter.getFragment(weekViewPager.currentItem)
 
-            val lastPageDay = _lastPageSelected?.selectedDay ?: dayFragment.selectedDay
+            val lastPageDay = lastPageSelected?.selectedDay ?: dayFragment.selectedDay
 
 
             val newWeekPos = weekViewPager.currentItem + (lastPageDay.weekOfYear - dayFragment.selectedDay.weekOfYear)
@@ -54,7 +53,7 @@ class ViewPagerHostFragment : Fragment() {
             println("weekFragment: $newWeekPos, dayFragment: $position")
             println("week: ${weekFragment.selectedDay}, day: ${dayFragment.selectedDay}")
 
-            _lastPageSelected = dayFragment
+            lastPageSelected = dayFragment
         }
     }
 

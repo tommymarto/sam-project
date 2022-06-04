@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tommymarto.healthapp">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,6 +17,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HealthApp"
         tools:targetApi="31">
+
+        <service android:name=".ActivityForegroundService"/>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:directBootAware="false"
+            android:exported="false"
+            android:multiprocess="true"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
