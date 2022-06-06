@@ -57,7 +57,7 @@ suspend fun updateNotification(context: Context, index: Int): Notification {
     }
 
     val text = when (avgCompletion(activity)) {
-        in 0.95F..Float.MAX_VALUE -> "Enough work today! Enjoy your rest!"
+        in 0.95F..Float.MAX_VALUE -> "Enough work today!"
         in 0.5F..0.95F -> "You're almost there! Do your best!"
         else -> "Make sure to fill your circles today!"
     }
@@ -73,15 +73,18 @@ fun initNotification(context: Context): Notification {
     return createNotification(context, layout)
 }
 
-private fun createNotificationLayout(context: Context, bitmap: Bitmap, text: String): RemoteViews {
+private fun createNotificationLayout(context: Context, bitmap: Bitmap, text: String): Pair<RemoteViews, RemoteViews> {
     val notificationLayout = RemoteViews(context.packageName, R.layout.notification_layout)
     notificationLayout.setImageViewBitmap(R.id.notificationImage, bitmap)
     notificationLayout.setTextViewText(R.id.textPhrase, text)
 
-    return notificationLayout
+    val smallLayout = RemoteViews(context.packageName, R.layout.notification_layout_small)
+    smallLayout.setImageViewBitmap(R.id.notificationImageSmall, bitmap)
+
+    return notificationLayout to smallLayout
 }
 
-private fun createNotification(context: Context, notificationLayout: RemoteViews): Notification {
+private fun createNotification(context: Context, notificationLayout: Pair<RemoteViews, RemoteViews>): Notification {
     val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
     return notificationBuilder
         .setSmallIcon(R.drawable.heart)
@@ -89,7 +92,8 @@ private fun createNotification(context: Context, notificationLayout: RemoteViews
         .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
         .setOnlyAlertOnce(true)
         .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-        .setCustomContentView(notificationLayout)
+        .setCustomContentView(notificationLayout.second)
+        .setCustomBigContentView(notificationLayout.first)
         .setColorized(true)
         .setColor(0xFF000000.toInt())
         .setOngoing(true)
