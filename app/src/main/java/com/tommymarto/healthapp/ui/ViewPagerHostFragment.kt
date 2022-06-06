@@ -37,18 +37,14 @@ class ViewPagerHostFragment : Fragment() {
 
             val lastPageDay = lastPageSelected?.selectedDay ?: dayFragment.selectedDay
 
-
             val newWeekPos = weekViewPager.currentItem + (lastPageDay.weekOfYear - dayFragment.selectedDay.weekOfYear)
             if (newWeekPos != weekViewPager.currentItem) {
-                val direction = -(newWeekPos - weekViewPager.currentItem)
-
                 weekViewPager.setCurrentItem(newWeekPos, true)
                 weekFragment = weekPagerAdapter.getFragment(newWeekPos)
-                weekFragment.selectedDay = lastPageDay.plusDays(direction.toLong())
-            } else {
-                weekFragment.selectedDay = dayFragment.selectedDay
-                weekFragment.updateSelectedDay()
             }
+
+            weekFragment.selectedDay = dayFragment.selectedDay
+            weekFragment.updateSelectedDay()
 
             println("weekFragment: $newWeekPos, dayFragment: $position")
             println("week: ${weekFragment.selectedDay}, day: ${dayFragment.selectedDay}")
@@ -79,18 +75,12 @@ class ViewPagerHostFragment : Fragment() {
 
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        binding.buttonSecond.setOnClickListener {
-//            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-//        }
-    }
-
+    
     override fun onDestroyView() {
         super.onDestroyView()
+
         dayViewPager.unregisterOnPageChangeCallback(onDayChangeCallback)
+        dayViewPager.adapter = null
         _binding = null
     }
 
@@ -112,6 +102,14 @@ class ViewPagerHostFragment : Fragment() {
             }
         }
 
+        override fun containsItem(itemId: Long): Boolean {
+            return fragmentCache.containsKey(itemId.toInt())
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
         fun getFragment(position: Int): DayFragment = createFragment(position) as DayFragment
     }
 
@@ -127,6 +125,14 @@ class ViewPagerHostFragment : Fragment() {
             return WeekFragment().also {
                 fragmentCache[position] = WeakReference(it)
             }
+        }
+
+        override fun containsItem(itemId: Long): Boolean {
+            return fragmentCache.containsKey(itemId.toInt())
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
         }
 
         fun getFragment(position: Int): WeekFragment = createFragment(position) as WeekFragment

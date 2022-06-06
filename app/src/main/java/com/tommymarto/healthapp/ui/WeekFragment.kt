@@ -52,9 +52,8 @@ class WeekFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        updateSelectedDay()
         initActivityDonutCharts()
-        fillActivityDonutCharts()
+        updateSelectedDay()
     }
 
     override fun onDestroyView() {
@@ -63,30 +62,33 @@ class WeekFragment : Fragment() {
     }
 
     fun updateSelectedDay() {
-        val days = listOf(
-            binding.textViewMon,
-            binding.textViewTue,
-            binding.textViewWed,
-            binding.textViewThu,
-            binding.textViewFri,
-            binding.textViewSat,
-            binding.textViewSun
-        )
+        lifecycleScope.launchWhenStarted {
+            val days = listOf(
+                binding.textViewMon,
+                binding.textViewTue,
+                binding.textViewWed,
+                binding.textViewThu,
+                binding.textViewFri,
+                binding.textViewSat,
+                binding.textViewSun
+            )
 
-        days.forEach {
-            it.backgroundTintMode = PorterDuff.Mode.MULTIPLY
-        }
+            days.forEach {
+                it.backgroundTintMode = PorterDuff.Mode.MULTIPLY
+            }
 
+            when (selectedDay.dayOfWeek) {
+                DayOfWeek.MONDAY -> binding.textViewMon.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                DayOfWeek.TUESDAY -> binding.textViewTue.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                DayOfWeek.WEDNESDAY -> binding.textViewWed.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                DayOfWeek.THURSDAY -> binding.textViewThu.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                DayOfWeek.FRIDAY -> binding.textViewFri.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                DayOfWeek.SATURDAY -> binding.textViewSat.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                DayOfWeek.SUNDAY -> binding.textViewSun.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                else -> {}
+            }
 
-        when (selectedDay.dayOfWeek) {
-            DayOfWeek.MONDAY -> binding.textViewMon.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.TUESDAY -> binding.textViewTue.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.WEDNESDAY -> binding.textViewWed.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.THURSDAY -> binding.textViewThu.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.FRIDAY -> binding.textViewFri.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.SATURDAY -> binding.textViewSat.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            DayOfWeek.SUNDAY -> binding.textViewSun.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
-            else -> {}
+            fillActivityDonutCharts()
         }
     }
 
