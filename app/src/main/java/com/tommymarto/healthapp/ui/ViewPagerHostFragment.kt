@@ -29,6 +29,8 @@ class ViewPagerHostFragment : Fragment() {
     private lateinit var dayPagerAdapter: DailyViewPagerAdapter
     private var onDayChangeCallback = object: ViewPager2.OnPageChangeCallback() {
         private var lastPageSelected: DayFragment? = null
+
+        // the callback is used to sync the week and day viewpagers and to update the week fragment accordingly
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
 
@@ -37,17 +39,16 @@ class ViewPagerHostFragment : Fragment() {
 
             val lastPageDay = lastPageSelected?.selectedDay ?: dayFragment.selectedDay
 
+            // check if week pager needs a "swipe"
             val newWeekPos = weekViewPager.currentItem + (lastPageDay.weekOfYear - dayFragment.selectedDay.weekOfYear)
             if (newWeekPos != weekViewPager.currentItem) {
                 weekViewPager.setCurrentItem(newWeekPos, true)
                 weekFragment = weekPagerAdapter.getFragment(newWeekPos)
             }
 
+            // trigger week fragment update
             weekFragment.selectedDay = dayFragment.selectedDay
-            weekFragment.updateSelectedDay()
-
-            println("weekFragment: $newWeekPos, dayFragment: $position")
-            println("week: ${weekFragment.selectedDay}, day: ${dayFragment.selectedDay}")
+            weekFragment.updateSelectedDay(lastPageSelected == null)
 
             lastPageSelected = dayFragment
         }
@@ -56,7 +57,7 @@ class ViewPagerHostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreate(savedInstanceState)
         _binding = ViewPagerHostFragmentBinding.inflate(inflater, container, false)
 
@@ -75,23 +76,23 @@ class ViewPagerHostFragment : Fragment() {
 
         return binding.root
     }
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
 
+        // unregister callback and destroy binding
         dayViewPager.unregisterOnPageChangeCallback(onDayChangeCallback)
         dayViewPager.adapter = null
         _binding = null
     }
 
     private inner class DailyViewPagerAdapter(fa: Fragment) : FragmentStateAdapter(fa) {
-        val now = LocalDateTime.now()
+        private val now: LocalDateTime = LocalDateTime.now()
 
         // only store as weak references, so you're not holding discarded fragments in memory
         private val fragmentCache = mutableMapOf<Int, WeakReference<DayFragment>>()
 
         override fun getItemCount(): Int = TOTAL_DAYS
-
         override fun createFragment(position: Int): Fragment {
             // return the cached fragment if there is one
             fragmentCache[position]?.get()?.let { return it }

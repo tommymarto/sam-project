@@ -41,19 +41,14 @@ class WeekFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = WeekFragmentBinding.inflate(inflater, container, false)
 
         initActivityDonutCharts()
+        fillActivityDonutCharts()
+        updateSelectedDay()
 
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        initActivityDonutCharts()
-        updateSelectedDay()
     }
 
     override fun onDestroyView() {
@@ -61,8 +56,11 @@ class WeekFragment : Fragment() {
         _binding = null
     }
 
-    fun updateSelectedDay() {
+    fun updateSelectedDay(forceUpdateCharts: Boolean = false) {
+        // execute only when started to avoid unsafe binding access
         lifecycleScope.launchWhenStarted {
+
+            // clear background drawables and highlight only the current day
             val days = listOf(
                 binding.textViewMon,
                 binding.textViewTue,
@@ -88,14 +86,15 @@ class WeekFragment : Fragment() {
                 else -> {}
             }
 
-            fillActivityDonutCharts()
+            if (forceUpdateCharts) {
+                fillActivityDonutCharts()
+            }
         }
     }
 
     /**
      *  Chart stuff
      */
-
     private data class ActivityDonut(
         val chartSteps: DonutChartView,
         val chartExercise: DonutChartView,
@@ -143,18 +142,23 @@ class WeekFragment : Fragment() {
     }
 
     private fun initActivityDonutCharts() {
+        // init chart
         days.forEach { fillDonut(it, 0F, 0F, 0F) }
     }
 
     private fun fillActivityDonutCharts() {
+        // get "most recent day" to fill (today if selected is in current week, sunday otherwise)
         val today = LocalDateTime.now()
         val first = if (selectedDay.weekOfYear == today.weekOfYear) today.dayOfWeek.ordinal else 6
 
+        // generate week dates for easier data retrieval
         val dates = (selectedDay.dayOfWeek.ordinal downTo 0).map { selectedDay.minusDays(it.toLong()) } +
                     (1..(6 - selectedDay.dayOfWeek.ordinal)).map { selectedDay.plusDays(it.toLong()) }
 
+        // asynchronously fill each chart
         (first downTo 0).forEach {
             lifecycleScope.launch {
+                // use IO dispatcher to avoid clogging the main thread
                 withContext(Dispatchers.IO) {
                     healthConnectManager.generateDataIfNotPresent(dates[it])
                     val dayActivity = healthConnectManager.getDayActivity(dates[it])

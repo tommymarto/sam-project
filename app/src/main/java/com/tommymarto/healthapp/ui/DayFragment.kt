@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.JointType
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.SphericalUtil
 import com.google.maps.android.ktx.awaitMap
 import com.google.maps.android.ktx.awaitMapLoad
@@ -47,9 +51,10 @@ class DayFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = DayFragmentBinding.inflate(inflater, container, false)
 
+        // init charts (and map) and asynchronously fill them
         fillActivityDonutChart()
         fillMovementChart()
         fillMap()
@@ -60,6 +65,7 @@ class DayFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        // update the toolbar title according to the selected day
         val formattedDate = selectedDay.format(DateTimeFormatter.ofPattern("dd LLLL yyyy"))
         val formattedDay = selectedDay.format(DateTimeFormatter.ofPattern("E"))
 
@@ -70,9 +76,9 @@ class DayFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // invalidate binding
         _binding = null
     }
-
 
 
     /**
@@ -80,7 +86,6 @@ class DayFragment : Fragment() {
      *
      *
      */
-
     private lateinit var gatherTodayData: Job
     private var todayDistance = 0F
     private fun fillActivityDonutChart() {
@@ -116,9 +121,12 @@ class DayFragment : Fragment() {
             )
         }
 
+        // init chart
         fill(0F, 0F, 0F)
 
+        // asynchronously fill
         gatherTodayData = lifecycleScope.launch {
+            // use IO dispatcher to avoid clogging the main thread
             withContext(Dispatchers.IO) {
                 healthConnectManager.generateDataIfNotPresent(selectedDay)
                 val dayActivity = healthConnectManager.getDayActivity(selectedDay)
@@ -139,7 +147,7 @@ class DayFragment : Fragment() {
      */
     private fun fillMovementChart() {
         val barCount = 47
-        var labels = (0..barCount).map {
+        val labels = (0..barCount).map {
             when (it) {
                 barCount / 4 -> "06:00"
                 2 * barCount / 4 -> "12:00"
@@ -180,14 +188,21 @@ class DayFragment : Fragment() {
             )
         }
 
-        val dummyValues = (0..barCount).map { (0).toFloat() }
-        binding.textViewDailySteps.text = "0${resources.getString(R.string.steps_goal)}"
-        binding.textViewDailyExercise.text = "0${resources.getString(R.string.exercise_goal)}"
-        binding.textViewDailyDistance.text = "0${resources.getString(R.string.distance_goal)}"
+        fun updateText(view: TextView, text: String) {
+            view.text = text
+        }
 
+        val dummyValues = (0..barCount).map { 0F }
+        updateText(binding.textViewDailySteps, "0${resources.getString(R.string.steps_goal)}")
+        updateText(binding.textViewDailyExercise, "0${resources.getString(R.string.exercise_goal)}")
+        updateText(binding.textViewDailyDistance, "0${resources.getString(R.string.distance_goal)}")
+
+        // init chart
         fill(dummyValues, dummyValues, dummyValues)
 
+        // asynchronously fill
         lifecycleScope.launch {
+            // use IO dispatcher to avoid clogging the main thread
             withContext(Dispatchers.IO) {
                 healthConnectManager.generateDataIfNotPresent(selectedDay)
                 val dayActivityDetailed = healthConnectManager.getDayActivityDetailed(selectedDay)
@@ -201,26 +216,33 @@ class DayFragment : Fragment() {
                     distance
                 )
 
-                binding.textViewDailySteps.text = "${steps.sum().toInt()}${resources.getString(R.string.steps_goal)}"
-                binding.textViewDailyExercise.text = "${activeTime.sum().toInt()}${resources.getString(R.string.exercise_goal)}"
-                binding.textViewDailyDistance.text = "${"%5.3f".format(distance.sum()/1000)}${resources.getString(R.string.distance_goal)}"
+                // update counters
+                updateText(binding.textViewDailySteps, "${steps.sum().toInt()}${resources.getString(R.string.steps_goal)}")
+                updateText(binding.textViewDailyExercise, "${activeTime.sum().toInt()}${resources.getString(R.string.exercise_goal)}")
+                updateText(binding.textViewDailyDistance, "${"%5.3f".format(distance.sum()/1000)}${resources.getString(R.string.distance_goal)}")
             }
         }
     }
 
     private fun fillMap() {
         fun generatePath(): List<LatLng> {
+            // generate data within the bounding box of Las Vegas
             val topLeft = LatLng(36.34, -115.34)
             val bottomRight = LatLng(36.0, -114.99)
 
             val startPoint = randomLatLng(topLeft, bottomRight)
             val path = mutableListOf(startPoint)
 
+            // try generate points on the polyline until the generated path length is comparable to the "real" data
             while (SphericalUtil.computeLength(path) < 0.9 * todayDistance) {
                 val nextPoint = randomLatLng(topLeft, bottomRight)
+
+                // avoid using points to distant to ensure a more realistic generation
                 if (SphericalUtil.computeDistanceBetween(path.last(), nextPoint) > max(0.2 * todayDistance, 100.0)) {
                     continue
                 }
+
+                // discard point if exceeds the "real" distance too much
                 if (SphericalUtil.computeLength(path + listOf(nextPoint)) < 1.1 * todayDistance) {
                     path.add(nextPoint)
                 }
@@ -246,6 +268,7 @@ class DayFragment : Fragment() {
             return boundsBuilder.build()
         }
 
+        // ensure that map creation is executed only when data is gathered and view created
         gatherTodayData.invokeOnCompletion {
             lifecycleScope.launchWhenCreated {
                 val mapFragment: SupportMapFragment =
@@ -272,7 +295,7 @@ class DayFragment : Fragment() {
     }
 }
 
-fun randomLatLng(topLeft: LatLng, bottomRight: LatLng): LatLng {
+private fun randomLatLng(topLeft: LatLng, bottomRight: LatLng): LatLng {
     val latMin = min(bottomRight.latitude, topLeft.latitude)
     val latMax = max(bottomRight.latitude, topLeft.latitude)
     val lngMin = min(bottomRight.longitude, topLeft.longitude)
@@ -281,4 +304,3 @@ fun randomLatLng(topLeft: LatLng, bottomRight: LatLng): LatLng {
     val lng = Random.nextDouble(lngMin, lngMax)
     return LatLng(lat, lng)
 }
-

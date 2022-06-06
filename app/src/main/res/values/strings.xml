@@ -4,4 +4,7 @@
     <string name="exercise_goal">/30 MIN</string>
     <string name="distance_goal">/6 KM</string>
     <string name="health_connect_download">market://details?id=com.google.android.apps.healthdata</string>
+    <string name="notification_top_text">Today\'s fitness report:</string>
+    <string name="notification_initial_bottom_text">Make sure to fill your circles today!</string>
+    <string name="share">SHARE</string>
 </resources>

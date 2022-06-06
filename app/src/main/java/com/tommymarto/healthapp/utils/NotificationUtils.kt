@@ -20,19 +20,20 @@ const val CHANNEL_ID = "dailyprogress"
 const val CHANNEL_NAME = "Daily Progress"
 const val CHANNEL_DESCRIPTION = "Shows the current status towards the daily goal"
 
-private var _application: App? = null
-private val application: App get() = _application!!
+private var applicationBackingField: App? = null
+private val application: App get() = applicationBackingField!!
 
 fun setApplication(application: App) {
-    _application = application
+    applicationBackingField = application
 }
 
-private var _notificationManager: NotificationManager? = null
-private val notificationManager get() = _notificationManager!!
+private var notificationBackingField: NotificationManager? = null
+private val notificationManager get() = notificationBackingField!!
 
 fun createNotificationChannel(context: Context) {
-    if (_notificationManager == null) {
-        _notificationManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+    // create notification channel only if it doesn't exist
+    if (notificationBackingField == null) {
+        notificationBackingField = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
         val importance = NotificationManager.IMPORTANCE_LOW
         val mChannel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
         mChannel.description = CHANNEL_DESCRIPTION
@@ -66,8 +67,7 @@ suspend fun updateNotification(context: Context, index: Int): Notification {
 }
 
 fun initNotification(context: Context): Notification {
-    val bitmapSize = 512
-    val bitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.ARGB_8888)
+    val bitmap = createChart(context, HealthConnectionManager.HealthActivity(0, 0F, 0))
 
     val layout = createNotificationLayout(context, bitmap, "")
     return createNotification(context, layout)
@@ -94,14 +94,25 @@ private fun createNotification(context: Context, notificationLayout: RemoteViews
         .setColor(0xFF000000.toInt())
         .setOngoing(true)
         .build()
-
 }
 
 private suspend fun createTodayChart(context: Context, index: Int): Pair<Bitmap, HealthConnectionManager.HealthActivity> {
     val activity = application.healthConnectManager.getDayActivity(LocalDateTime.now())
-    val steps = activity.steps.toFloat() * index / 100
-    val exercise = activity.activeTime * index / 100
-    val distance = activity.distance.toFloat() * index / 100
+    val steps = activity.steps.toFloat() * index / 10
+    val exercise = activity.activeTime * index / 10
+    val distance = activity.distance.toFloat() * index / 10
+
+    val activityData = HealthConnectionManager.HealthActivity(
+        steps.toLong(), exercise, distance.toLong()
+    )
+
+    return createChart(context, activityData) to activityData
+}
+
+private fun createChart(context: Context, activityData: HealthConnectionManager.HealthActivity): Bitmap {
+    val steps = activityData.steps.toFloat()
+    val exercise = activityData.activeTime
+    val distance = activityData.distance.toFloat()
 
     val values = listOf(steps, exercise, distance)
 
@@ -152,12 +163,11 @@ private suspend fun createTodayChart(context: Context, index: Int): Pair<Bitmap,
         ),
     )
 
-//    canvas.drawARGB(255, 0, 0, 0)
     (colors zip values).forEach {
-        val padding = it.first.properties.thickness
+        val innerPadding = it.first.properties.thickness
         val center = bitmapSize.div(2F)
-        val min = center - it.first.radius - (padding / 2)
-        val max = center + it.first.radius + (padding / 2)
+        val min = center - it.first.radius - (innerPadding / 2)
+        val max = center + it.first.radius + (innerPadding / 2)
         val rect = RectF(min, min, max, max)
 
         paint.strokeWidth = it.first.properties.thickness
@@ -170,7 +180,5 @@ private suspend fun createTodayChart(context: Context, index: Int): Pair<Bitmap,
         canvas.drawArc(rect, 90F, sweep, false, paint)
     }
 
-    return bitmap to HealthConnectionManager.HealthActivity(
-        steps.toLong(), exercise, distance.toLong()
-    )
+    return bitmap
 }

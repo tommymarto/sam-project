@@ -18,6 +18,7 @@ class DBClient(context: Context) {
     }
 
     suspend fun insertDay(day: LocalDateTime, path: List<LatLng>) {
+        // use IO dispatcher cause database access shouldn't be on main thread
         withContext(Dispatchers.IO) {
             val pointDao = db.pointDao()
             val points = path.map {

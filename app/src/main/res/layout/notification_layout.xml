@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:text="Today's fitness report:"
+        android:text="@string/notification_top_text"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
@@ -25,7 +25,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="38dp"
-        android:text=""
+        android:text="@string/notification_initial_bottom_text"
         android:textColor="@color/white"
         android:textSize="14sp"
         tools:text="You're almost there! Keep up the good work!" />

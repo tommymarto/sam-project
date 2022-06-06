@@ -14,6 +14,7 @@ import com.tommymarto.healthapp.ActivityForegroundService
 import com.tommymarto.healthapp.App
 import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.data.HealthConnectAvailability
+import com.tommymarto.healthapp.data.HealthConnectionManager
 import com.tommymarto.healthapp.databinding.PermissionFragmentBinding
 import com.tommymarto.healthapp.utils.healthConnectManager
 import com.tommymarto.healthapp.utils.setApplication
@@ -25,12 +26,18 @@ class PermissionFragment : Fragment() {
     private var _binding: PermissionFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private fun startNotificationService() {
+        val activity = requireActivity()
+        setApplication(activity.application as App)
+        activity.startService(Intent(activity, ActivityForegroundService::class.java))
+    }
+
     private val permissionLauncher by lazy {
+        // request permission
         registerForActivityResult(HealthDataRequestPermissions()) { granted ->
-            if (granted.containsAll(this@PermissionFragment.healthConnectManager.PERMISSIONS)) {
-                val activity = requireActivity()
-                setApplication(activity.application as App)
-                activity.startService(Intent(activity, ActivityForegroundService::class.java))
+            if (granted.containsAll(HealthConnectionManager.PERMISSIONS)) {
+                // start service and navigate only if all permissions are granted
+                startNotificationService()
                 findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
             } else {
                 binding.textViewNoPermissions.visibility = View.VISIBLE
@@ -41,13 +48,14 @@ class PermissionFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = PermissionFragmentBinding.inflate(inflater, container, false)
 
         // create permissionLauncher
         permissionLauncher
 
+        //
         binding.buttonInstallHealthConnect.setOnClickListener {
             context?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(resources.getString(R.string.health_connect_download))))
         }
@@ -55,7 +63,8 @@ class PermissionFragment : Fragment() {
         return binding.root
     }
 
-    var alreadyAskedForPermissions = false
+    // don't ask for permissions twice
+    private var alreadyAskedForPermissions = false
     override fun onResume() {
         super.onResume()
 
@@ -68,12 +77,11 @@ class PermissionFragment : Fragment() {
 
                 alreadyAskedForPermissions = true
                 if(healthConnectManager.hasAllPermissions()) {
-                    val activity = requireActivity()
-                    setApplication(activity.application as App)
-                    activity.startService(Intent(activity, ActivityForegroundService::class.java))
+                    // start service and navigate only if all permissions are granted
+                    startNotificationService()
                     findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
                 } else {
-                    permissionLauncher.launch(healthConnectManager.PERMISSIONS)
+                    permissionLauncher.launch(HealthConnectionManager.PERMISSIONS)
                 }
             }
 

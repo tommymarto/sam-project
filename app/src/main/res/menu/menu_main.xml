@@ -6,6 +6,7 @@
     <item
         android:id="@+id/shareButton"
         android:icon="?attr/actionModeShareDrawable"
-        android:title="SHARE"
+        android:visible="false"
+        android:title="@string/share"
         app:showAsAction="always" />
 </menu>
