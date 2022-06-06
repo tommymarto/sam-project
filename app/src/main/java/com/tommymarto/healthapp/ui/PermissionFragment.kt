@@ -1,27 +1,23 @@
 package com.tommymarto.healthapp.ui
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.health.connect.client.permission.HealthDataRequestPermissions
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.tommymarto.healthapp.ActivityForegroundService
 import com.tommymarto.healthapp.App
-import com.tommymarto.healthapp.MainActivity
 import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.data.HealthConnectAvailability
-import com.tommymarto.healthapp.databinding.DayFragmentBinding
 import com.tommymarto.healthapp.databinding.PermissionFragmentBinding
 import com.tommymarto.healthapp.utils.healthConnectManager
-import kotlinx.coroutines.coroutineScope
+import com.tommymarto.healthapp.utils.setApplication
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class PermissionFragment : Fragment() {
 
@@ -32,6 +28,9 @@ class PermissionFragment : Fragment() {
     private val permissionLauncher by lazy {
         registerForActivityResult(HealthDataRequestPermissions()) { granted ->
             if (granted.containsAll(this@PermissionFragment.healthConnectManager.PERMISSIONS)) {
+                val activity = requireActivity()
+                setApplication(activity.application as App)
+                activity.startService(Intent(activity, ActivityForegroundService::class.java))
                 findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
             } else {
                 binding.textViewNoPermissions.visibility = View.VISIBLE
@@ -69,6 +68,9 @@ class PermissionFragment : Fragment() {
 
                 alreadyAskedForPermissions = true
                 if(healthConnectManager.hasAllPermissions()) {
+                    val activity = requireActivity()
+                    setApplication(activity.application as App)
+                    activity.startService(Intent(activity, ActivityForegroundService::class.java))
                     findNavController().navigate(R.id.action_PermissionFragment_to_ViewPagerHostFragment)
                 } else {
                     permissionLauncher.launch(healthConnectManager.PERMISSIONS)

@@ -29,11 +29,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.PermissionFragment, R.id.ViewPagerHostFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        lifecycleScope.launchWhenCreated {
-            setApplication(application as App)
-            startService(Intent(this@MainActivity, ActivityForegroundService::class.java))
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
