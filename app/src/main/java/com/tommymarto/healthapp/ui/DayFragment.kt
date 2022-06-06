@@ -17,8 +17,10 @@ import com.tommymarto.healthapp.MainActivity
 import com.tommymarto.healthapp.R
 import com.tommymarto.healthapp.databinding.DayFragmentBinding
 import com.tommymarto.healthapp.utils.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Double.max
 import java.lang.Double.min
 import java.time.LocalDateTime
@@ -117,14 +119,16 @@ class DayFragment : Fragment() {
         fill(0F, 0F, 0F)
 
         gatherTodayData = lifecycleScope.launch {
-            healthConnectManager.generateDataIfNotPresent(selectedDay)
-            val dayActivity = healthConnectManager.getDayActivity(selectedDay)
-            fill(
-                dayActivity.steps.toFloat(),
-                dayActivity.activeTime,
-                dayActivity.distance.toFloat()
-            )
-            todayDistance = dayActivity.distance.toFloat()
+            withContext(Dispatchers.IO) {
+                healthConnectManager.generateDataIfNotPresent(selectedDay)
+                val dayActivity = healthConnectManager.getDayActivity(selectedDay)
+                fill(
+                    dayActivity.steps.toFloat(),
+                    dayActivity.activeTime,
+                    dayActivity.distance.toFloat()
+                )
+                todayDistance = dayActivity.distance.toFloat()
+            }
         }
     }
 
@@ -184,21 +188,23 @@ class DayFragment : Fragment() {
         fill(dummyValues, dummyValues, dummyValues)
 
         lifecycleScope.launch {
-            healthConnectManager.generateDataIfNotPresent(selectedDay)
-            val dayActivityDetailed = healthConnectManager.getDayActivityDetailed(selectedDay)
-            val steps = dayActivityDetailed.map { it.steps.toFloat() }
-            val activeTime = dayActivityDetailed.map { it.activeTime }
-            val distance = dayActivityDetailed.map { it.distance.toFloat() }
+            withContext(Dispatchers.IO) {
+                healthConnectManager.generateDataIfNotPresent(selectedDay)
+                val dayActivityDetailed = healthConnectManager.getDayActivityDetailed(selectedDay)
+                val steps = dayActivityDetailed.map { it.steps.toFloat() }
+                val activeTime = dayActivityDetailed.map { it.activeTime }
+                val distance = dayActivityDetailed.map { it.distance.toFloat() }
 
-            fill(
-                steps,
-                activeTime,
-                distance
-            )
+                fill(
+                    steps,
+                    activeTime,
+                    distance
+                )
 
-            binding.textViewDailySteps.text = "${steps.sum().toInt()}${resources.getString(R.string.steps_goal)}"
-            binding.textViewDailyExercise.text = "${activeTime.sum().toInt()}${resources.getString(R.string.exercise_goal)}"
-            binding.textViewDailyDistance.text = "${"%5.3f".format(distance.sum()/1000)}${resources.getString(R.string.distance_goal)}"
+                binding.textViewDailySteps.text = "${steps.sum().toInt()}${resources.getString(R.string.steps_goal)}"
+                binding.textViewDailyExercise.text = "${activeTime.sum().toInt()}${resources.getString(R.string.exercise_goal)}"
+                binding.textViewDailyDistance.text = "${"%5.3f".format(distance.sum()/1000)}${resources.getString(R.string.distance_goal)}"
+            }
         }
     }
 
@@ -242,7 +248,8 @@ class DayFragment : Fragment() {
 
         gatherTodayData.invokeOnCompletion {
             lifecycleScope.launchWhenCreated {
-                val mapFragment: SupportMapFragment = childFragmentManager.findFragmentById(R.id.dayMap) as SupportMapFragment
+                val mapFragment: SupportMapFragment =
+                    childFragmentManager.findFragmentById(R.id.dayMap) as SupportMapFragment
                 val googleMap: GoogleMap = mapFragment.awaitMap()
                 googleMap.uiSettings.setAllGesturesEnabled(false)
 
@@ -260,7 +267,6 @@ class DayFragment : Fragment() {
                 val camera = CameraUpdateFactory
                     .newLatLngBounds(bounds, 50)
                 googleMap.moveCamera(camera)
-
             }
         }
     }

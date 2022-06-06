@@ -14,7 +14,9 @@ import com.tommymarto.healthapp.utils.DonutChartProperties
 import com.tommymarto.healthapp.utils.fillDonutChart
 import com.tommymarto.healthapp.utils.healthConnectManager
 import com.tommymarto.healthapp.utils.weekOfYear
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 
@@ -151,14 +153,16 @@ class WeekFragment : Fragment() {
 
         (first downTo 0).forEach {
             lifecycleScope.launch {
-                healthConnectManager.generateDataIfNotPresent(dates[it])
-                val dayActivity = healthConnectManager.getDayActivity(dates[it])
-                fillDonut(
-                    days[it],
-                    dayActivity.steps.toFloat(),
-                    dayActivity.activeTime,
-                    dayActivity.distance.toFloat()
-                )
+                withContext(Dispatchers.IO) {
+                    healthConnectManager.generateDataIfNotPresent(dates[it])
+                    val dayActivity = healthConnectManager.getDayActivity(dates[it])
+                    fillDonut(
+                        days[it],
+                        dayActivity.steps.toFloat(),
+                        dayActivity.activeTime,
+                        dayActivity.distance.toFloat()
+                    )
+                }
             }
         }
     }
